@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistiques - NFL France</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="statistiques.js" defer></script>
+    <link rel="preconnect" href="https://a.espncdn.com" crossorigin>
+</head>
+<body>
+
+    <header>
+         <div class="logo">
+            <h1>🏈NFL FRANCE</h1>
+        </div>
+
+        <nav>
+            <ul>
+                <li>
+                    <a href="index.html">Accueil</a>
+                </li>
+
+                <li>
+                    <a href="actualites.html">Actualités</a>
+                </li>
+
+                <li>
+                    <a href="joueurs.html">Joueurs</a>
+                </li>
+
+                <li>
+                    <a href="statistiques.html">Statistiques</a>
+                </li>
+            </ul>
+        </nav>
+
+    </header>
+
+    <main class="page-stats">
+
+        <section class="banniere-stats">
+            <h2>Statistiques NFL</h2>
+            <p>Retrouve les joueurs des 32 équipes NFL</p>
+            <p>Saison 2026</p>
+        </section>
+
+        <section class="filtres-stats">
+            <input
+                type="search"
+                id="recherche-joueur"
+                placeholder="Rechercher un joueur..."
+            >
+
+            <select id="choix-equipe">
+                <option value="">Choisir une équipe</option>
+            </select>
+
+            <select id="choix-poste">
+                <option value="">Tous les postes</option>
+                <option value="QB">Quarterbacks</option>
+                <option value="RB">Running Backs</option>
+                <option value="WR">Wide Receivers</option>
+                <option value="TE">Tight Ends</option>
+                <option value="OL">Ligne offensive</option>
+                <option value="DL">Ligne défensive</option>
+                <option value="LB">Linebackers</option>
+                <option value="DB">Defensive Backs</option>
+                <option value="K">Kickers</option>
+                <option value="P">Punters</option>
+            </select>
+        </section>
+
+        <p id="message-stats">
+            Sélectionne une équipe pour afficher les joueurs.
+        </p>
+
+        <section id="joueurs-stats" class="grille-joueurs-stats">
+        </section>
+
+        <section id="details-joueur" class="details-joueur" hidden>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>© 2026 NFL France</p>
+    </footer>
+
+</body>
+</html>
