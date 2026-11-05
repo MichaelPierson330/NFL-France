@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vidéos NFL - NFL France</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="videos.js" defer></script>
+</head>
+<body>
+
+<header class="entete">
+    <a href="index.html" class="logo-site">🏈 NFL France</a>
+
+    <nav>
+        <a href="index.html">Accueil</a>
+        <a href="actualites.html">Actualités</a>
+        <a href="statistiques.html">Statistiques</a>
+        <a href="videos.html" class="actif">Vidéos</a>
+    </nav>
+</header>
+
+<main>
+    <section class="banniere">
+        <p class="surtitre">NFL FRANCE • VIDÉOS</p>
+        <h1>Les meilleurs moments de la NFL</h1>
+        <p>Retrouve les résumés, les touchdowns et les actions spectaculaires.</p>
+    </section>
+
+    <section class="contenu">
+        <h2>Temps forts NFL</h2>
+
+        <div class="filtres">
+            <input
+                type="search"
+                id="recherche-video"
+                placeholder="Rechercher une vidéo..."
+            >
+
+            <select id="filtre-video">
+                <option value="tous">Toutes les vidéos</option>
+                <option value="resumes">Résumés des matchs</option>
+                <option value="touchdowns">Touchdowns</option>
+                <option value="actions">Meilleures actions</option>
+            </select>
+        </div>
+
+        <div id="grille-videos" class="grille-videos"></div>
+
+        <p id="message-videos"></p>
+    </section>
+</main>
+
+<footer>
+    <p>© 2026 NFL France - Site de passionnés</p>
+</footer>
+
+</body>
+</html>

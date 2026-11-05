@@ -1,0 +1,1173 @@
+
+/* ============================= */
+/* RÉGLAGES GÉNÉRAUX */
+/* ============================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #222;
+    line-height: 1.5;
+}
+
+img {
+    max-width: 100%;
+}
+
+button, input, select {
+    font: inherit;
+}
+
+/* ============================= */
+/* HEADER ET MENU */
+/* ============================= */
+
+header,
+.entete {
+    background-color: #111;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 8%;
+    gap: 20px;
+}
+
+.logo h1 {
+    font-size: 28px;
+}
+
+.logo-site {
+    color: white;
+    font-size: 26px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+nav ul {
+    display: flex;
+    gap: 30px;
+    list-style: none;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.2s;
+}
+
+nav a:hover,
+nav a.actif {
+    color: #e63946;
+}
+
+.entete nav {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+/* ============================= */
+/* BANNIÈRE */
+/* ============================= */
+
+.banniere {
+    background: linear-gradient(135deg, #1d3557, #10213c);
+    color: white;
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.banniere h1,
+.banniere h2 {
+    font-size: 45px;
+    margin-bottom: 15px;
+}
+
+.banniere p {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.surtitre {
+    color: #ff7b85;
+    font-size: 14px !important;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+/* ============================= */
+/* BOUTONS */
+/* ============================= */
+
+.bouton {
+    display: inline-block;
+    background-color: #e63946;
+    color: white;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.bouton:hover {
+    background-color: #c1121f;
+}
+
+/* ============================= */
+/* JOUEURS STARS ACCUEIL */
+/* ============================= */
+
+.joueurs-stars {
+    padding: 50px 8%;
+}
+
+.joueurs-stars h2 {
+    font-size: 30px;
+    margin-bottom: 30px;
+}
+
+.liste-joueurs {
+    display: flex;
+    gap: 25px;
+}
+
+.carte-joueur {
+    background-color: white;
+    width: 33%;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
+
+.photo-joueur {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    object-position: center 25%;
+    display: block;
+    margin-bottom: 20px;
+    border-radius: 7px;
+}
+
+.carte-joueur h3 {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.carte-joueur p {
+    margin-bottom: 7px;
+}
+
+.carte-joueur a {
+    display: inline-block;
+    margin: 12px 0 5px;
+    color: #e63946;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.carte-joueur a:hover {
+    text-decoration: underline;
+}
+
+/* ============================= */
+/* ACTUALITÉS ACCUEIL */
+/* ============================= */
+
+.actualites {
+    background-color: white;
+    padding: 50px 8%;
+}
+
+.actualites h2 {
+    font-size: 30px;
+    margin-bottom: 30px;
+}
+
+.article {
+    padding: 20px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.article h3 {
+    margin-bottom: 10px;
+}
+
+.article p {
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.article a {
+    color: #e63946;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.article a:hover {
+    text-decoration: underline;
+}
+
+/* ============================= */
+/* STATISTIQUES ACCUEIL */
+/* ============================= */
+
+.statistiques {
+    padding: 50px 8%;
+}
+
+.statistiques h2 {
+    font-size: 30px;
+    margin-bottom: 30px;
+}
+
+.stats-container {
+    display: flex;
+    gap: 20px;
+}
+
+.stat {
+    background-color: #1d3557;
+    color: white;
+    width: 33.333%;
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.stat h3 {
+    font-size: 25px;
+    margin-bottom: 15px;
+}
+
+.stat p {
+    margin-bottom: 20px;
+}
+
+.stat a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.stat a:hover {
+    text-decoration: underline;
+}
+
+/* ============================= */
+/* PAGE ACTUALITÉS */
+/* ============================= */
+
+.page-actualites {
+    padding: 40px 8%;
+}
+
+.page-actualites h2,
+.actualites h2 {
+    font-size: 28px;
+    margin-bottom: 25px;
+}
+
+.grille-actualites {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    margin: 25px 0;
+    align-items: stretch;
+}
+
+.carte-actualite {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.carte-actualite .image-actualite {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.contenu-actualite {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.contenu-actualite h3 {
+    font-size: 17px;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    color: #222;
+}
+
+.date-actualite {
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 15px;
+}
+
+.contenu-actualite a {
+    color: #e63946;
+    font-weight: bold;
+    text-decoration: none;
+    margin-top: auto;
+}
+
+.contenu-actualite a:hover {
+    text-decoration: underline;
+}
+
+/* ============================= */
+/* PAGE ARTICLE */
+/* ============================= */
+
+.page-article {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.retour-article {
+    display: inline-block;
+    margin-bottom: 25px;
+    color: #e63946;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#article-complet {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+#article-complet h2 {
+    font-size: 30px;
+    line-height: 1.3;
+    margin-bottom: 15px;
+    color: #111;
+}
+
+.photo-article {
+    width: 100%;
+    max-height: 450px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+.resume-article {
+    font-size: 18px;
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 25px;
+}
+
+#article-complet a {
+    color: #e63946;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* ============================= */
+/* PAGE STATISTIQUES NFL */
+/* ============================= */
+
+.page-stats {
+    max-width: 1250px;
+    margin: auto;
+    padding: 30px 20px;
+}
+
+.banniere-stats {
+    background: #1d3557;
+    color: white;
+    text-align: center;
+    padding: 35px 20px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+.banniere-stats h2 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.filtres-stats {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+.filtres-stats input,
+.filtres-stats select {
+    flex: 1;
+    min-width: 180px;
+    padding: 13px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 15px;
+    background: white;
+}
+
+#message-stats {
+    margin: 20px 0;
+    color: #555;
+}
+
+.grille-joueurs-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.carte-joueur-stats {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+    min-width: 0;
+}
+
+.carte-joueur-stats img.photo-joueur-stats,
+.carte-joueur-stats > img:not(.logo-equipe-joueur) {
+    width: 130px;
+    height: 130px;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    margin: 0 auto 15px;
+}
+
+.carte-joueur-stats h3 {
+    font-size: 18px;
+    color: #1d3557;
+    margin-bottom: 10px;
+}
+
+.carte-joueur-stats p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+/* LOGO ÉQUIPE */
+
+.logo-equipe-joueur,
+.carte-joueur-stats img.logo-equipe-joueur {
+    width: 55px;
+    height: 55px;
+    object-fit: contain;
+    display: block;
+    margin: 12px auto;
+    visibility: visible;
+}
+
+/* BOUTONS JOUEURS */
+
+.carte-joueur-stats button {
+    background: #e63946;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    padding: 10px 15px;
+    cursor: pointer;
+    margin-top: 12px;
+}
+
+.carte-joueur-stats button:hover {
+    background: #bd2532;
+}
+
+.bouton-voir-plus,
+.bouton-stats-joueur {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    background: #153a70;
+    color: white;
+    cursor: pointer;
+}
+
+.bouton-voir-plus:hover,
+.bouton-stats-joueur:hover {
+    background: #245ca3;
+}
+
+/* DÉTAILS DU JOUEUR */
+
+.details-joueur {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    margin-top: 40px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.12);
+}
+
+.details-joueur[hidden] {
+    display: none;
+}
+
+.details-joueur h2 {
+    color: #1d3557;
+    margin-bottom: 15px;
+}
+
+.photo-detail-joueur {
+    width: 180px;
+    height: 180px;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    margin: 15px auto;
+}
+
+/* STATISTIQUES DÉTAILLÉES */
+
+.section-statistique {
+    margin-top: 25px;
+}
+
+.section-statistique h3 {
+    background: #1d3557;
+    color: white;
+    padding: 12px;
+    border-radius: 7px;
+    margin-bottom: 10px;
+}
+
+.ligne-statistique {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.ligne-statistique:nth-child(even) {
+    background: #f5f7fa;
+}
+
+/* BOUTONS SAISONS */
+
+.boutons-saisons,
+#choix-saisons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 25px 0;
+}
+
+.boutons-saisons button,
+.bouton-saison {
+    background: #1d3557;
+    color: white;
+    border: none;
+    padding: 12px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.boutons-saisons button:hover,
+.bouton-saison:hover {
+    background: #284b7a;
+}
+
+.boutons-saisons button.actif,
+.bouton-saison.actif {
+    background: #e63946;
+    color: white;
+}
+
+/* TABLEAUX STATISTIQUES */
+
+.tableau-statistiques {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.tableau-statistiques td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.tableau-statistiques td:last-child {
+    text-align: right;
+    font-weight: bold;
+}
+
+.bloc-statistiques {
+    margin-bottom: 25px;
+}
+
+.bloc-statistiques h4 {
+    background: #1d3557;
+    color: white;
+    padding: 12px;
+    border-radius: 7px;
+    margin-bottom: 10px;
+}
+
+.fermer-statistiques {
+    padding: 8px 14px;
+    cursor: pointer;
+    margin-bottom: 15px;
+    background: #e63946;
+    color: white;
+    border: none;
+    border-radius: 7px;
+}
+
+/* ============================= */
+/* PAGE INDIVIDUELLE DES JOUEURS */
+/* ============================= */
+
+.page-joueur {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.page-joueur > a {
+    color: #e63946;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+#profil-joueur {
+    text-align: center;
+    padding: 30px;
+    border-radius: 15px;
+    background: white;
+    color: #17243a;
+    margin: 25px 0;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+}
+
+#profil-joueur h1 {
+    font-size: 32px;
+    margin: 12px 0;
+}
+
+.photo-profil-joueur {
+    width: 180px;
+    height: 180px;
+    object-fit: contain;
+}
+
+.logo-profil-equipe {
+    width: 75px;
+    height: 75px;
+    object-fit: contain;
+    display: block;
+    margin: 15px auto;
+}
+
+#stats-joueur {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+/* ============================= */
+/* PAGE VIDÉOS NFL */
+/* ============================= */
+
+.contenu {
+    max-width: 1250px;
+    margin: 45px auto;
+    padding: 0 20px;
+}
+
+.contenu > h2 {
+    font-size: 30px;
+    color: #1d3557;
+    margin-bottom: 25px;
+    border-left: 5px solid #e63946;
+    padding-left: 15px;
+}
+
+/* RECHERCHE ET FILTRES VIDÉOS */
+
+.filtres {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.filtres input,
+.filtres select {
+    padding: 13px 15px;
+    border: 1px solid #d6dce5;
+    border-radius: 8px;
+    background: white;
+    color: #222;
+    font-size: 15px;
+    outline: none;
+}
+
+.filtres input {
+    flex: 1;
+    min-width: 0;
+}
+
+.filtres input:focus,
+.filtres select:focus {
+    border-color: #e63946;
+    box-shadow: 0 0 0 3px rgba(230,57,70,0.1);
+}
+
+/* GRILLE DES VIDÉOS */
+
+.grille-videos {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 25px;
+}
+
+/* CARTE VIDÉO */
+
+.carte-video {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    min-width: 0;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.carte-video:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 22px rgba(0,0,0,0.16);
+}
+
+/* LECTEUR YOUTUBE */
+
+.lecteur-video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #101b2e;
+    overflow: hidden;
+}
+
+.lecteur-video iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* INFORMATIONS VIDÉO */
+
+.infos-video {
+    padding: 20px;
+}
+
+.categorie-video {
+    display: inline-block;
+    color: #e63946;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.infos-video h3 {
+    color: #1d3557;
+    font-size: 19px;
+    line-height: 1.4;
+    margin-bottom: 10px;
+}
+
+.infos-video p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+#message-videos {
+    text-align: center;
+    color: #666;
+    margin: 25px 0;
+}
+
+/* ============================= */
+/* FOOTER */
+/* ============================= */
+
+footer {
+    background-color: #111;
+    color: white;
+    text-align: center;
+    padding: 25px;
+    margin-top: 40px;
+}
+
+/* ============================= */
+/* RESPONSIVE TABLETTE */
+/* ============================= */
+
+@media screen and (max-width: 1000px) {
+
+    .grille-joueurs-stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grille-videos,
+    .grille-actualites {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media screen and (max-width: 800px) {
+
+    header,
+    .entete {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    nav ul,
+    .entete nav {
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 10px;
+        gap: 15px;
+    }
+
+    .banniere h1,
+    .banniere h2 {
+        font-size: 32px;
+    }
+
+    .liste-joueurs,
+    .stats-container {
+        flex-direction: column;
+    }
+
+    .carte-joueur,
+    .stat {
+        width: 100%;
+    }
+
+    .grille-joueurs-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* ============================= */
+/* RESPONSIVE TÉLÉPHONE */
+/* ============================= */
+
+@media screen and (max-width: 600px) {
+
+    header,
+    .entete {
+        padding: 20px 5%;
+    }
+
+    .logo h1,
+    .logo-site {
+        font-size: 24px;
+    }
+
+    nav ul,
+    .entete nav {
+        gap: 12px;
+    }
+
+    nav a {
+        font-size: 14px;
+    }
+
+    .banniere {
+        padding: 55px 15px;
+    }
+
+    .banniere h1,
+    .banniere h2 {
+        font-size: 29px;
+    }
+
+    .banniere p {
+        font-size: 16px;
+    }
+
+    .joueurs-stars,
+    .actualites,
+    .statistiques {
+        padding: 35px 5%;
+    }
+
+    .grille-actualites,
+    .grille-joueurs-stats,
+    .grille-videos {
+        grid-template-columns: 1fr;
+    }
+
+    .carte-actualite .image-actualite {
+        height: 190px;
+    }
+
+    .filtres,
+    .filtres-stats {
+        flex-direction: column;
+    }
+
+    .filtres input,
+    .filtres select,
+    .filtres-stats input,
+    .filtres-stats select {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .contenu {
+        margin: 30px auto;
+        padding: 0 15px;
+    }
+
+    .contenu > h2 {
+        font-size: 25px;
+    }
+
+    .details-joueur,
+    #stats-joueur,
+    #article-complet {
+        padding: 18px;
+    }
+
+    #article-complet h2 {
+        font-size: 23px;
+    }
+
+    .resume-article {
+        font-size: 16px;
+    }
+
+    .boutons-saisons button,
+    .bouton-saison {
+        flex: 1 1 110px;
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    .page-joueur {
+        margin: 20px auto;
+        padding: 15px;
+    }
+
+    #profil-joueur {
+        padding: 20px;
+    }
+
+    #profil-joueur h1 {
+        font-size: 26px;
+    }
+
+    .tableau-statistiques td {
+        padding: 9px 6px;
+        font-size: 13px;
+    }
+}
+/* CORRECTION DES CARTES JOUEURS */
+
+.liste-joueurs {
+    display: flex;
+    gap: 25px;
+    align-items: stretch;
+}
+
+.carte-joueur {
+    width: calc((100% - 50px) / 3);
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.carte-joueur .photo-joueur {
+    display: block;
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    object-position: center 25%;
+    margin: 0 0 20px;
+    border-radius: 7px;
+    flex-shrink: 0;
+}
+
+.carte-joueur h3 {
+    position: static;
+    font-size: 22px;
+    margin: 0 0 10px;
+    color: #222;
+}
+
+.carte-joueur p {
+    position: static;
+    margin: 0 0 8px;
+    color: #333;
+}
+
+.carte-joueur a {
+    position: static;
+    margin-top: auto;
+    padding-top: 15px;
+    color: #e63946;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+@media (max-width: 800px) {
+    .liste-joueurs {
+        flex-direction: column;
+    }
+
+    .carte-joueur {
+        width: 100%;
+    }
+}
+
+/* CORRECTION DÉFINITIVE DES CARTES JOUEURS */
+
+.joueurs-stars .liste-joueurs {
+    display: flex;
+    gap: 25px;
+    align-items: stretch;
+}
+
+.joueurs-stars .carte-joueur {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: calc((100% - 50px) / 3);
+    height: auto;
+    min-height: 0;
+    padding: 15px;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.joueurs-stars .carte-joueur .photo-joueur,
+.joueurs-stars .carte-joueur > img {
+    position: static;
+    display: block;
+    width: 100%;
+    height: 200px;
+    max-height: 200px;
+    min-height: 200px;
+    object-fit: cover;
+    object-position: center 25%;
+    margin: 0 0 20px;
+    border-radius: 7px;
+    flex: none;
+}
+
+.joueurs-stars .carte-joueur h3,
+.joueurs-stars .carte-joueur p,
+.joueurs-stars .carte-joueur a {
+    position: static;
+    transform: none;
+    float: none;
+    width: auto;
+    height: auto;
+    flex: none;
+    z-index: auto;
+}
+
+.joueurs-stars .carte-joueur h3 {
+    margin: 0 0 10px;
+    font-size: 22px;
+    color: #222;
+}
+
+.joueurs-stars .carte-joueur p {
+    margin: 0 0 8px;
+    color: #333;
+}
+
+.joueurs-stars .carte-joueur a {
+    display: inline-block;
+    margin: auto 0 5px;
+    padding-top: 15px;
+    color: #e63946;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+@media (max-width: 800px) {
+    .joueurs-stars .liste-joueurs {
+        flex-direction: column;
+    }
+
+    .joueurs-stars .carte-joueur {
+        width: 100%;
+    }
+}
+
+/* CORRECTION PHOTOS JOUEURS ACCUEIL */
+
+.joueurs-stars .carte-joueur .photo-joueur {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    display: block;
+    margin-bottom: 25px;
+    border-radius: 7px;
+}
+
+.joueurs-stars .carte-joueur .photo-joueur img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 0%;
+}
+
+.joueurs-stars .carte-joueur h3 {
+    margin-bottom: 10px;
+    color: #222;
+}
+
+.joueurs-stars .carte-joueur p {
+    margin-bottom: 7px;
+}
+
+.joueurs-stars .carte-joueur a {
+    display: inline-block;
+    margin-top: 12px;
+    color: #e63946;
+}
