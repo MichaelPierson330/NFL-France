@@ -1261,3 +1261,693 @@ footer {
 .lien-video:hover .bouton-video {
     background: #cc0029;
 }
+
+/* ===== FANTASY NFL FRANCE ===== */
+
+[hidden] {
+    display: none !important;
+}
+
+.fantasy-page {
+    max-width: 1300px;
+    margin: auto;
+    padding: 28px 24px 70px;
+}
+
+.fantasy-page .eyebrow {
+    display: block;
+    color: #e63946;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.fantasy-hero {
+    background: linear-gradient(115deg, #0b1425, #1d3557);
+    color: white;
+    padding: 45px;
+    border-radius: 18px;
+    margin-bottom: 24px;
+}
+
+.fantasy-hero h1 {
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.15;
+    margin-bottom: 12px;
+}
+
+.fantasy-hero p {
+    max-width: 750px;
+    color: #d6e0f0;
+}
+
+/* BOUTONS */
+
+.fantasy-page button {
+    background: #e63946;
+    border: none;
+    border-radius: 9px;
+    color: white;
+    padding: 11px 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.fantasy-page button:hover:not(:disabled) {
+    background: #be2533;
+    transform: translateY(-1px);
+}
+
+.fantasy-page button:disabled {
+    background: #9ba3b1;
+    cursor: not-allowed;
+}
+
+.fantasy-page button.secondary {
+    background: #253a59;
+}
+
+/* FORMULAIRES */
+
+.fantasy-page input,
+.fantasy-page select {
+    width: 100%;
+    min-width: 0;
+    border: 1px solid #cfd7e3;
+    border-radius: 9px;
+    padding: 12px;
+    background: white;
+    color: #18253a;
+}
+
+.fantasy-panel {
+    background: white;
+    border: 1px solid #e1e6ee;
+    border-radius: 15px;
+    padding: 24px;
+    box-shadow: 0 5px 22px rgba(13,30,52,0.06);
+    min-width: 0;
+}
+
+.fantasy-panel h2,
+.fantasy-panel h3 {
+    color: #172b4b;
+    margin-bottom: 16px;
+}
+
+.fantasy-panel h3 {
+    font-size: 20px;
+}
+
+.fantasy-form {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 18px;
+    align-items: end;
+}
+
+.fantasy-form label,
+.manager-select {
+    display: grid;
+    gap: 8px;
+    font-weight: bold;
+    color: #263a58;
+}
+
+.fantasy-form button {
+    min-height: 47px;
+}
+
+.fantasy-hint {
+    color: #68758a;
+    font-size: 14px;
+    margin-top: 14px;
+}
+
+/* TABLEAU DE BORD */
+
+.fantasy-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+    margin: 20px 0;
+}
+
+.fantasy-toolbar h2 {
+    font-size: 29px;
+    color: #172b4b;
+}
+
+#draft-status {
+    margin-top: 6px;
+    color: #4b5d77;
+}
+
+/* NAVIGATION FANTASY */
+
+.fantasy-tabs {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 8px 0 14px;
+}
+
+.fantasy-tabs a {
+    flex: 0 0 auto;
+    padding: 11px 18px;
+    background: white;
+    color: #1d3557;
+    border: 1px solid #dce3ec;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.fantasy-tabs a:hover {
+    color: white;
+    background: #1d3557;
+}
+
+/* STATISTIQUES DRAFT */
+
+.fantasy-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 14px;
+    margin: 15px 0 22px;
+}
+
+.fantasy-stats > div {
+    background: #142641;
+    color: white;
+    border-radius: 13px;
+    padding: 18px 22px;
+    min-width: 0;
+}
+
+.fantasy-stats span {
+    display: block;
+    color: #c5d2e4;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+.fantasy-stats strong {
+    font-size: clamp(19px, 2.5vw, 29px);
+    overflow-wrap: anywhere;
+}
+
+/* PROGRESSION */
+
+.fantasy-progress {
+    height: 9px;
+    background: #e3e8f0;
+    border-radius: 99px;
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+
+.fantasy-progress > div {
+    width: 0;
+    height: 100%;
+    background: #e63946;
+    transition: width 0.25s;
+}
+
+/* COLONNES */
+
+.fantasy-columns {
+    display: grid;
+    grid-template-columns: minmax(0,1.2fr) minmax(0,1fr);
+    gap: 20px;
+    align-items: start;
+}
+
+/* RECHERCHE */
+
+.fantasy-filters {
+    display: grid;
+    grid-template-columns: minmax(0,1fr) 160px;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+/* JOUEURS */
+
+.player-list {
+    display: grid;
+    gap: 9px;
+    max-height: 650px;
+    overflow: auto;
+    padding-right: 4px;
+}
+
+.player-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    background: #f5f7fb;
+    border: 1px solid #e7ebf1;
+    border-radius: 10px;
+    padding: 12px;
+}
+
+.player-row > div {
+    min-width: 0;
+}
+
+.player-row strong,
+.roster-row strong {
+    display: block;
+    color: #182b49;
+    overflow-wrap: anywhere;
+}
+
+.player-row small,
+.roster-row small {
+    display: block;
+    color: #6b788c;
+    margin-top: 4px;
+}
+
+.player-row button {
+    flex: 0 0 auto;
+}
+
+/* EFFECTIFS */
+
+.manager-select {
+    margin-bottom: 15px;
+}
+
+.roster-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 4px;
+    border-bottom: 1px solid #e6eaf0;
+}
+
+.subheading {
+    margin-top: 26px;
+}
+
+.history-row {
+    padding: 11px 0;
+    border-bottom: 1px solid #e8edf3;
+    color: #42516a;
+    font-size: 14px;
+}
+
+.empty-state {
+    color: #718096;
+    background: #f5f7fa;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+}
+
+/* CONFRONTATIONS */
+
+.matchups {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 12px;
+}
+
+.matchup {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    background: #f4f7fb;
+    border-radius: 10px;
+    padding: 18px;
+}
+
+.matchup span {
+    color: #748096;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.fantasy-full-panel {
+    margin-top: 20px;
+}
+
+/* TABLETTE */
+
+@media (max-width: 900px) {
+    .fantasy-columns {
+        grid-template-columns: 1fr;
+    }
+
+    .fantasy-form {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+    }
+}
+
+/* TÉLÉPHONE */
+
+@media (max-width: 600px) {
+    .fantasy-page {
+        padding: 16px 12px 45px;
+    }
+
+    .fantasy-hero {
+        padding: 28px 20px;
+    }
+
+    .fantasy-panel {
+        padding: 16px;
+    }
+
+    .fantasy-form,
+    .fantasy-stats,
+    .matchups {
+        grid-template-columns: 1fr;
+    }
+
+    .fantasy-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .fantasy-filters {
+        grid-template-columns: 1fr;
+    }
+
+    .fantasy-stats {
+        gap: 9px;
+    }
+
+    .fantasy-stats > div {
+        padding: 12px 16px;
+    }
+
+    .player-row {
+        padding: 10px;
+    }
+
+    .matchup {
+        flex-wrap: wrap;
+    }
+}
+
+.fantasy-player-images {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  flex-shrink: 0;
+}
+
+.fantasy-player-photo {
+  display: block;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center top;
+  background: #172338;
+}
+
+.fantasy-team-logo {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  border-radius: 50%;
+  background: white;
+  padding: 3px;
+}
+
+.player-row,
+.roster-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.player-info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.player-info strong {
+  font-size: 15px;
+}
+
+.player-info small {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.fantasy-projection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 75px;
+  gap: 4px;
+}
+
+.fantasy-projection strong {
+  color: #38bdf8;
+  font-size: 19px;
+}
+
+.fantasy-projection small {
+  color: #94a3b8;
+  font-size: 10px;
+}
+
+.fantasy-injury {
+  color: #fb923c !important;
+}
+
+.fantasy-player-count {
+  color: #94a3b8;
+  margin-bottom: 15px;
+}
+
+#nfl-team-filter {
+  padding: 10px;
+  border-radius: 8px;
+  background: #172338;
+  color: white;
+  border: 1px solid #334155;
+  max-width: 220px;
+}
+
+#load-more-players {
+  display: block;
+  margin: 20px auto;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#load-more-players:hover {
+  background: #1d4ed8;
+}
+
+@media (max-width: 600px) {
+  .fantasy-player-images {
+    width: 55px;
+    height: 55px;
+  }
+
+  .fantasy-player-photo {
+    width: 50px;
+    height: 50px;
+  }
+
+  .fantasy-team-logo {
+    width: 23px;
+    height: 23px;
+  }
+
+  .player-row,
+  .roster-row {
+    gap: 8px;
+  }
+
+  .player-info strong {
+    font-size: 13px;
+  }
+
+  .fantasy-projection {
+    min-width: 52px;
+  }
+
+  .fantasy-projection strong {
+    font-size: 15px;
+  }
+
+  #nfl-team-filter {
+    max-width: 100%;
+  }
+}
+
+.fantasy-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(6px);
+}
+
+.fantasy-modal {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  padding: 30px;
+  background: #192842;
+  color: white;
+  border: 1px solid #354966;
+  border-radius: 18px;
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.5);
+  animation: fantasyModalOpen 0.2s ease;
+}
+
+.fantasy-modal h2 {
+  margin: 0 30px 24px 0;
+  font-size: 23px;
+  color: white;
+}
+
+.fantasy-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  padding: 5px 10px;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.fantasy-modal-player {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px;
+  background: #101d32;
+  border-radius: 12px;
+  margin-bottom: 18px;
+}
+
+.fantasy-modal-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.fantasy-modal-info h3 {
+  margin: 0 0 8px;
+  font-size: 19px;
+  color: white;
+}
+
+.fantasy-modal-info p {
+  margin: 5px 0;
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.fantasy-modal-info .fantasy-modal-points {
+  color: #60a5fa;
+  font-weight: bold;
+}
+
+.fantasy-modal-message {
+  color: #cbd5e1;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0 0 24px;
+}
+
+.fantasy-modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.fantasy-modal-actions button {
+  flex: 1;
+  padding: 13px 12px;
+  border: none;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.fantasy-modal-cancel {
+  background: #334155;
+  color: white;
+}
+
+.fantasy-modal-confirm {
+  background: #2563eb;
+  color: white;
+}
+
+.fantasy-modal-confirm:hover {
+  background: #1d4ed8;
+}
+
+.fantasy-modal-danger {
+  background: #dc2626;
+}
+
+.fantasy-modal-danger:hover {
+  background: #b91c1c;
+}
+
+@keyframes fantasyModalOpen {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 500px) {
+  .fantasy-modal {
+    padding: 20px;
+  }
+
+  .fantasy-modal h2 {
+    font-size: 20px;
+  }
+
+  .fantasy-modal-player {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .fantasy-modal-actions {
+    gap: 8px;
+  }
+}

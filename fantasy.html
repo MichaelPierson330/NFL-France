@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fantasy - NFL France</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="fantasy.js" defer></script>
+</head>
+
+<body>
+
+    <header class="entete">
+        <a href="index.html" class="logo-site">🏈 NFL France</a>
+
+        <nav>
+            <a href="index.html">Accueil</a>
+            <a href="actualites.html">Actualités</a>
+            <a href="statistiques.html">Statistiques</a>
+            <a href="videos.html">Vidéos</a>
+            <a href="fantasy.html" class="actif">Fantasy</a>
+        </nav>
+    </header>
+
+    <main class="fantasy-page">
+
+        <section class="fantasy-hero">
+            <span class="eyebrow">NFL FRANCE • FANTASY</span>
+            <h1>Ta ligue. Ta draft. Ton équipe.</h1>
+            <p>Crée ta ligue, sélectionne tes joueurs NFL et construis ton équipe pour affronter les autres managers.</p>
+        </section>
+
+        <section class="fantasy-panel" id="creation">
+
+            <h2>🏆 Créer une ligue</h2>
+
+            <form id="league-form" class="fantasy-form">
+
+                <label>
+                    Nom de la ligue
+                    <input id="league-name" maxlength="45"
+                           placeholder="Ex : Ligue des Vikings" required>
+                </label>
+
+                <label>
+                    Nombre de managers
+                    <select id="manager-count">
+                        <option value="4">4 managers</option>
+                        <option value="6">6 managers</option>
+                        <option value="8">8 managers</option>
+                        <option value="10">10 managers</option>
+                        <option value="12">12 managers</option>
+                    </select>
+                </label>
+
+                <label>
+                    Nombre de tours
+                    <select id="round-count">
+                        <option value="3">3 tours (démo rapide)</option>
+                        <option value="6">6 tours</option>
+                        <option value="15">15 tours</option>
+                    </select>
+                </label>
+
+                <button type="submit">Créer ma ligue</button>
+
+            </form>
+
+            <p class="fantasy-hint">
+                Version démo : tous les managers jouent sur le même navigateur.
+            </p>
+
+        </section>
+
+        <section id="dashboard" hidden>
+
+            <div class="fantasy-toolbar" id="vue-ensemble">
+
+                <div>
+                    <span class="eyebrow">MA LIGUE</span>
+                    <h2 id="league-title"></h2>
+                    <p id="draft-status" aria-live="polite"></p>
+                </div>
+
+                <button id="reset-league" class="secondary" type="button">
+                    Nouvelle ligue
+                </button>
+
+            </div>
+
+            <nav class="fantasy-tabs">
+                <a href="#vue-ensemble">Tableau de bord</a>
+                <a href="#draft">Draft</a>
+                <a href="#effectifs">Mon équipe</a>
+                <a href="#confrontations">Confrontations</a>
+            </nav>
+
+            <div class="fantasy-stats">
+
+                <div>
+                    <span>Choix réalisés</span>
+                    <strong id="pick-count">0</strong>
+                </div>
+
+                <div>
+                    <span>Tour actuel</span>
+                    <strong id="round-number">1</strong>
+                </div>
+
+                <div>
+                    <span>Manager actif</span>
+                    <strong id="current-manager">—</strong>
+                </div>
+
+            </div>
+
+            <div class="fantasy-progress"
+                 role="progressbar"
+                 aria-label="Progression de la draft"
+                 aria-valuemin="0"
+                 aria-valuemax="100"
+                 aria-valuenow="0">
+                <div id="draft-progress-fill"></div>
+            </div>
+
+            <div class="fantasy-columns">
+
+                <section class="fantasy-panel" id="draft">
+
+                    <h3>🏈 Joueurs disponibles</h3>
+
+                    <div class="fantasy-filters">
+
+                        <input id="player-search"
+                               type="search"
+                               placeholder="Rechercher un joueur...">
+
+                        <select id="position-filter">
+                            <option value="ALL">Tous les postes</option>
+                            <option>QB</option>
+                            <option>RB</option>
+                            <option>WR</option>
+                            <option>TE</option>
+                            <option>K</option>
+                            <option>DEF</option>
+                        </select>
+
+                    </div>
+
+                    <div id="player-list" class="player-list"></div>
+
+                </section>
+
+                <section class="fantasy-panel" id="effectifs">
+
+                    <h3>👕 Équipes et effectifs</h3>
+
+                    <label class="manager-select">
+                        Afficher l'équipe
+                        <select id="team-select"></select>
+                    </label>
+
+                    <div id="team-roster"></div>
+
+                    <h3 class="subheading">Derniers choix</h3>
+
+                    <div id="draft-history"></div>
+
+                </section>
+
+            </div>
+
+            <section class="fantasy-panel fantasy-full-panel"
+                     id="confrontations">
+
+                <h3>🏆 Confrontations</h3>
+
+                <p class="fantasy-hint">
+                    Les duels de la semaine 1.
+                    Les scores réels seront ajoutés plus tard.
+                </p>
+
+                <div id="matchups" class="matchups"></div>
+
+            </section>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>© 2026 NFL France — Fantasy</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const count = document.getElementById("pick-count");
+            const bar = document.querySelector(".fantasy-progress");
+            const fill = document.getElementById("draft-progress-fill");
+
+            function updateProgress() {
+                const match = count.textContent.match(/(\d+)\s*\/\s*(\d+)/);
+
+                const percent = match && Number(match[2])
+                    ? Math.round(Number(match[1]) / Number(match[2]) * 100)
+                    : 0;
+
+                fill.style.width = percent + "%";
+                bar.setAttribute("aria-valuenow", String(percent));
+            }
+
+            new MutationObserver(updateProgress).observe(count, {
+                childList: true,
+                characterData: true,
+                subtree: true
+            });
+
+            updateProgress();
+        });
+    </script>
+
+</body>
+</html>
