@@ -1,44 +1,22 @@
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
     const recherche = document.getElementById("recherche-video");
     const filtre = document.getElementById("filtre-video");
     const grille = document.getElementById("grille-videos");
     const message = document.getElementById("message-videos");
 
-    const videos = [
-        {
-    titre: "Top 15 des meilleures actions - Week 8 (2026)",
-    categorie: "actions",
-    description: "Les 15 meilleures actions de la semaine 8 de NFL.",
-    id: "734G0waDRxI"
-},
-        {
-            titre: "1 heure des meilleurs touchdowns NFL",
-            categorie: "touchdowns",
-            description: "Une compilation des touchdowns de la saison 2025 et des playoffs.",
-            id: "apI84QUp7Zs"
-        }
-    ];
-
-    const nomsCategories = {
-        resumes: "Résumé de match",
-        touchdowns: "Touchdowns",
-        actions: "Meilleures actions"
-    };
+    let videos = [];
 
     function afficherVideos() {
-
         const texte = recherche.value.toLowerCase().trim();
         const categorie = filtre.value;
 
         grille.innerHTML = "";
 
-        const videosFiltrees = videos.filter(video => {
-
+        const resultats = videos.filter(video => {
             const correspondRecherche =
-                video.titre.toLowerCase().includes(texte) ||
-                video.description.toLowerCase().includes(texte);
+                video.titre.toLowerCase().includes(texte);
 
             const correspondCategorie =
                 categorie === "tous" ||
@@ -47,71 +25,131 @@ document.addEventListener("DOMContentLoaded", () => {
             return correspondRecherche && correspondCategorie;
         });
 
-        videosFiltrees.forEach(video => {
-
+        resultats.forEach(video => {
             const carte = document.createElement("article");
             carte.className = "carte-video";
 
             const lecteur = document.createElement("div");
             lecteur.className = "lecteur-video";
 
-            const iframe = document.createElement("iframe");
+            const lien = document.createElement("a");
+            lien.className = "lien-video";
+            lien.href = video.url;
+            lien.target = "_blank";
+            lien.rel = "noopener noreferrer";
+            lien.setAttribute("aria-label", "Regarder " + video.titre);
 
-            iframe.src =
-                "https://www.youtube.com/embed/" + video.id;
+            const image = document.createElement("img");
+            image.src = video.image;
+            image.alt = video.titre;
+            image.className = "image-video";
+            image.loading = "lazy";
 
-            iframe.title = video.titre;
-            iframe.loading = "lazy";
-            iframe.allow =
-                "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-            iframe.allowFullscreen = true;
+            const bouton = document.createElement("span");
+            bouton.className = "bouton-video";
+            bouton.textContent = "▶";
 
-            lecteur.appendChild(iframe);
+            lien.appendChild(image);
+            lien.appendChild(bouton);
+            lecteur.appendChild(lien);
 
             const infos = document.createElement("div");
             infos.className = "infos-video";
 
             const categorieTexte = document.createElement("span");
             categorieTexte.className = "categorie-video";
-            categorieTexte.textContent =
-                nomsCategories[video.categorie] || "NFL";
+            categorieTexte.textContent = video.categorieNom;
 
             const titre = document.createElement("h3");
             titre.textContent = video.titre;
 
-            const description = document.createElement("p");
-            description.textContent = video.description;
+            const date = document.createElement("p");
 
-            const lien = document.createElement("a");
-            lien.href = "https://www.youtube.com/watch?v=" + video.id;
-            lien.target = "_blank";
-            lien.rel = "noopener noreferrer";
-            lien.textContent = "Regarder sur YouTube";
-            lien.style.display = "inline-block";
-            lien.style.marginTop = "15px";
-            lien.style.color = "#e63946";
-            lien.style.fontWeight = "bold";
-            lien.style.textDecoration = "none";
+            if (video.date) {
+                date.textContent = new Date(video.date).toLocaleDateString(
+                    "fr-FR",
+                    {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric"
+                    }
+                );
+            }
 
             infos.appendChild(categorieTexte);
             infos.appendChild(titre);
-            infos.appendChild(description);
-            infos.appendChild(lien);
+            infos.appendChild(date);
 
             carte.appendChild(lecteur);
             carte.appendChild(infos);
-
             grille.appendChild(carte);
         });
 
-        message.textContent = videosFiltrees.length === 0
-            ? "Aucune vidéo trouvée dans cette catégorie."
+        message.textContent = resultats.length === 0
+            ? "Aucune vidéo trouvée."
             : "";
+    }
+
+    function determinerCategorie(titre) {
+        const texte = titre.toLowerCase();
+
+        if (
+            texte.includes("résumé") ||
+            texte.includes("resume") ||
+            texte.includes("highlights")
+        ) {
+            return {
+                categorie: "resumes",
+                categorieNom: "Résumé de match"
+            };
+        }
+
+        if (
+            texte.includes("touchdown") ||
+            texte.includes("td ")
+        ) {
+            return {
+                categorie: "touchdowns",
+                categorieNom: "Touchdowns"
+            };
+        }
+
+        return {
+            categorie: "actions",
+            categorieNom: "NFL Extra"
+        };
+    }
+
+    message.textContent = "Chargement des vidéos NFL Extra...";
+
+    try {
+        const reponse = await fetch("videos.json", {
+            cache: "no-store"
+        });
+
+        if (!reponse.ok) {
+            throw new Error("Impossible de charger videos.json");
+        }
+
+        const donnees = await reponse.json();
+
+        if (!Array.isArray(donnees)) {
+            throw new Error("Format JSON incorrect");
+        }
+
+        videos = donnees.map(video => ({
+            ...video,
+            ...determinerCategorie(video.titre || "")
+        }));
+
+        afficherVideos();
+
+    } catch (erreur) {
+        console.error(erreur);
+        message.textContent =
+            "Impossible de charger les vidéos. Vérifie videos.json.";
     }
 
     recherche.addEventListener("input", afficherVideos);
     filtre.addEventListener("change", afficherVideos);
-
-    afficherVideos();
 });
-
