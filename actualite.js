@@ -1,19 +1,22 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    const liste = document.getElementById("liste-actualites");
-    const message = document.getElementById("message-actualites");
+    const liste =
+        document.getElementById("liste-actualites") ||
+        document.getElementById("dernieres-actus");
 
-    if (!liste || !message) {
+    const message =
+        document.getElementById("message-actualites") ||
+        document.getElementById("message-accueil");
+
+    if (!liste) {
         return;
     }
 
     const api =
         "https://site.api.espn.com/apis/site/v2/sports/football/nfl/news";
 
-    const accueil =
-        location.pathname.endsWith("index.html") ||
-        location.pathname.endsWith("/");
+    const accueil = liste.id === "dernieres-actus";
 
     const CACHE_DUREE = 10 * 60 * 1000;
 
@@ -135,7 +138,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (historique.length > 0) {
             afficherArticles(historique);
-            message.textContent = "";
+            if (message) {
+    message.textContent = "";
+}
         } else {
             message.textContent = "Chargement des actualités NFL...";
         }

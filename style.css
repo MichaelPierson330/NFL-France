@@ -1999,3 +1999,56 @@ footer {
         margin: 20px auto;
     }
 }
+.actus-accueil {
+    padding: 50px 5%;
+}
+
+.actus-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.voir-tout {
+    display: block;
+    text-align: center;
+    margin-top: 30px;
+}
+
+@media (max-width: 700px) {
+    .actus-grid {
+        grid-template-columns: 1fr;
+    }
+}
+.actus-accueil {
+    padding: 50px 5%;
+}
+
+.actus-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.actus-grid .carte-actualite {
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.actus-grid .image-actualite {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.voir-tout {
+    display: block;
+    text-align: center;
+    margin-top: 30px;
+}
+
+@media (max-width: 700px) {
+    .actus-grid {
+        grid-template-columns: 1fr;
+    }
+}
