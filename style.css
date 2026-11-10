@@ -42,7 +42,50 @@ header,
 .logo h1 {
     font-size: 28px;
 }
+.logo-nfl {
+    width: fit-content;
+    max-width: 100%;
+    margin: 20px 0 20px 30px;
+    padding: 18px 45px;
+    text-align: center;
 
+    background: linear-gradient(135deg, #172b49, #0b1628);
+    border: 1px solid #8b9bb0;
+    border-radius: 12px;
+
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+}
+
+.logo-nfl h1 {
+    color: #ffffff;
+    font-size: 40px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    margin: 0;
+}
+
+.logo-nfl p {
+    color: #b7c5d8;
+    font-size: 11px;
+    letter-spacing: 3px;
+    margin: 8px 0 0;
+}
+
+@media (max-width: 600px) {
+    .logo-nfl {
+        padding: 15px 20px;
+    }
+
+    .logo-nfl h1 {
+        font-size: 26px;
+        letter-spacing: 1px;
+    }
+
+    .logo-nfl p {
+        font-size: 9px;
+        letter-spacing: 1px;
+    }
+}
 .logo-site {
     color: white;
     font-size: 26px;
@@ -1950,4 +1993,9 @@ footer {
   .fantasy-modal-actions {
     gap: 8px;
   }
+}
+@media (max-width: 600px) {
+    .logo-nfl {
+        margin: 20px auto;
+    }
 }
