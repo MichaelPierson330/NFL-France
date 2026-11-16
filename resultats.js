@@ -1,4 +1,3 @@
-
 /* ==================================================
    NFL FRANCE — RÉSULTATS & CLASSEMENTS
    Saison 2026
@@ -303,7 +302,6 @@ function traduireStat(label, categorie = "") {
 
     return TRADUCTIONS_STATS[cle] || label;
 }
-
 /* ==================================================
    TRADUCTION DES DESCRIPTIONS DE MATCH
 ================================================== */
@@ -868,16 +866,17 @@ async function afficherDetails(id) {
         `;
     }
 }
-
 /* ==================================================
    CLASSEMENTS AFC / NFC
 ================================================== */
 
-function extraireGroupes(noeud, resultats = []) {
+// Récupération des divisions et des conférences ESPN
+function extraireGroupes(noeud, resultats = [], conferenceParente = "") {
+
     if (Array.isArray(noeud)) {
-        noeud.forEach(element =>
-            extraireGroupes(element, resultats)
-        );
+        noeud.forEach(element => {
+            extraireGroupes(element, resultats, conferenceParente);
+        });
 
         return resultats;
     }
@@ -886,20 +885,36 @@ function extraireGroupes(noeud, resultats = []) {
         return resultats;
     }
 
+    const nom = String(noeud.name || noeud.abbreviation || "");
+    const identite = `${nom} ${noeud.abbreviation || ""}`.toLowerCase();
+
+    let conference = conferenceParente;
+
+    if (/\bafc\b|american football conference/.test(identite)) {
+        conference = "afc";
+    } else if (/\bnfc\b|national football conference/.test(identite)) {
+        conference = "nfc";
+    }
+
     if (Array.isArray(noeud.standings?.entries)) {
+        const divisionMatch = identite.match(/\b(east|north|south|west)\b/);
+
         resultats.push({
-            name: noeud.name || noeud.abbreviation || "",
+            name: nom || "Classement",
+            conference,
+            division: divisionMatch ? divisionMatch[1] : "",
             entries: noeud.standings.entries
         });
     }
 
     if (noeud.children) {
-        extraireGroupes(noeud.children, resultats);
+        extraireGroupes(noeud.children, resultats, conference);
     }
 
     return resultats;
 }
 
+// Récupération d'une statistique d'équipe
 function valeurStat(entree, noms) {
     const statistiques = entree.stats || [];
 
@@ -912,15 +927,37 @@ function valeurStat(entree, noms) {
         (stat?.value === undefined ? "—" : String(stat.value));
 }
 
+// Conversion du pourcentage pour trier les équipes
+function valeurNumeriqueStat(entree, noms) {
+    const statistiques = entree.stats || [];
+
+    const stat = statistiques.find(element =>
+        noms.includes(element.name) ||
+        noms.includes(element.abbreviation)
+    );
+
+    if (typeof stat?.value === "number") {
+        return stat.value;
+    }
+
+    const affichage = String(stat?.displayValue ?? "0")
+        .replace("%", "")
+        .trim();
+
+    return Number(affichage) || 0;
+}
+
+// Affichage des classements
 async function afficherClassements() {
-    const conference = $("conference").value;
-    const division = $("division").value;
+    const conference = $("conference").value.toLowerCase();
+    const division = $("division").value.toLowerCase();
 
-    $("message-classements").textContent =
-        "Chargement du classement…";
+    const message = $("message-classements");
+    const conteneur = $("tableaux-classements");
 
-    $("tableaux-classements").replaceChildren();
-    $("tableaux-classements").dataset.loaded = "";
+    message.textContent = "Chargement du classement…";
+    conteneur.replaceChildren();
+    conteneur.dataset.loaded = "";
 
     try {
         const data = await charger(
@@ -929,56 +966,29 @@ async function afficherClassements() {
 
         const groupes = extraireGroupes(data.children || data);
 
-        const groupeConference = groupes.find(groupe =>
-            groupe.name.toLowerCase().includes(conference)
+        // Sélection de la conférence et de ses divisions
+        let groupesAffiches = groupes.filter(groupe =>
+            groupe.conference === conference &&
+            groupe.division &&
+            (division === "all" || groupe.division === division)
         );
 
-        const nomsConference = conference === "afc"
-            ? ["afc", "american"]
-            : ["nfc", "national"];
-
-        const groupesChoisis = groupes.filter(groupe => {
-            const nom = groupe.name.toLowerCase();
-
-            const bonneConference =
-                nomsConference.some(nomConf =>
-                    nom.includes(nomConf)
-                ) ||
-                (
-                    groupeConference &&
-                    groupeConference.entries.some(entree =>
-                        groupe.entries.some(element =>
-                            element.team?.id === entree.team?.id
-                        )
-                    )
-                );
-
-            const bonneDivision = division === "all"
-                ? /east|north|south|west/i.test(nom)
-                : nom.includes(division.toLowerCase());
-
-            return bonneConference && bonneDivision;
-        });
-
-        let groupesAffiches = groupesChoisis;
-
-        if (
-            !groupesAffiches.length &&
-            groupeConference &&
-            division === "all"
-        ) {
-            groupesAffiches = [groupeConference];
+        // Solution de secours si ESPN renvoie les équipes
+        // directement dans un groupe de conférence
+        if (!groupesAffiches.length && division === "all") {
+            groupesAffiches = groupes.filter(groupe =>
+                groupe.conference === conference && !groupe.division
+            );
         }
 
         if (!groupesAffiches.length) {
-            $("message-classements").textContent =
-                "Classement indisponible pour ce filtre.";
+            console.error("Structure ESPN des classements :", data);
+
+            message.textContent =
+                "Aucun classement trouvé pour cette conférence ou cette division.";
 
             return;
         }
-
-        $("message-classements").textContent =
-            `Classement ${conference.toUpperCase()} — saison ${SAISON}`;
 
         const nomsDivisions = {
             east: "Est",
@@ -987,26 +997,30 @@ async function afficherClassements() {
             west: "Ouest"
         };
 
+        message.textContent =
+            `Classement ${conference.toUpperCase()} — saison ${SAISON}`;
+
         for (const groupe of groupesAffiches) {
             const section = document.createElement("section");
+            section.className = "bloc-classement";
 
             const titre = document.createElement("h2");
-            const nomGroupe = groupe.name.toLowerCase();
 
             titre.textContent =
-                nomsDivisions[nomGroupe] || groupe.name;
+                nomsDivisions[groupe.division] || groupe.name;
 
             section.append(titre);
 
+            // Tri selon le pourcentage de victoires
             const lignes = [...groupe.entries].sort((a, b) =>
-                Number(valeurStat(b, ["winPercent", "PCT"])) -
-                Number(valeurStat(a, ["winPercent", "PCT"]))
+                valeurNumeriqueStat(b, ["winPercent", "PCT"]) -
+                valeurNumeriqueStat(a, ["winPercent", "PCT"])
             );
 
-            const conteneur = document.createElement("div");
-            conteneur.className = "tableau-scroll";
+            const tableauHTML = document.createElement("div");
+            tableauHTML.className = "tableau-scroll";
 
-            conteneur.innerHTML = `
+            tableauHTML.innerHTML = `
                 <table class="tableau-nfl">
                     <thead>
                         <tr>
@@ -1027,27 +1041,19 @@ async function afficherClassements() {
                                 </td>
 
                                 <td>
-                                    ${echapper(
-                                        valeurStat(entree, ["wins", "W"])
-                                    )}
+                                    ${echapper(valeurStat(entree, ["wins", "W"]))}
                                 </td>
 
                                 <td>
-                                    ${echapper(
-                                        valeurStat(entree, ["losses", "L"])
-                                    )}
+                                    ${echapper(valeurStat(entree, ["losses", "L"]))}
                                 </td>
 
                                 <td>
-                                    ${echapper(
-                                        valeurStat(entree, ["ties", "T"])
-                                    )}
+                                    ${echapper(valeurStat(entree, ["ties", "T"]))}
                                 </td>
 
                                 <td>
-                                    ${echapper(
-                                        valeurStat(entree, ["winPercent", "PCT"])
-                                    )}
+                                    ${echapper(valeurStat(entree, ["winPercent", "PCT"]))}
                                 </td>
                             </tr>
                         `).join("")}
@@ -1055,17 +1061,17 @@ async function afficherClassements() {
                 </table>
             `;
 
-            section.append(conteneur);
-            $("tableaux-classements").append(section);
+            section.append(tableauHTML);
+            conteneur.append(section);
         }
 
-        $("tableaux-classements").dataset.loaded = "1";
+        conteneur.dataset.loaded = "1";
 
     } catch (erreur) {
-        console.error(erreur);
+        console.error("Erreur lors du chargement des classements NFL :", erreur);
 
-        $("message-classements").textContent =
-            "Impossible de charger les classements. Réessaie plus tard.";
+        message.textContent =
+            "Impossible de charger les classements. Vérifie ta connexion ou réessaie plus tard.";
     }
 }
 
