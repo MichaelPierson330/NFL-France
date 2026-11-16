@@ -2985,8 +2985,9 @@ footer {
 
 .leaders-entete h2 {
     color: #1d3557;
+    font-family: Arial, sans-serif;
     font-size: 30px;
-    font-weight: 900;
+    font-weight: 700;
     margin-bottom: 8px;
 }
 
@@ -3260,4 +3261,26 @@ footer {
 }
 #classements-joueurs {
     scroll-margin-top: 100px;
+}
+/* POLICE UNIFORME - PAGE LEADERS NFL */
+
+.leaders-accueil,
+.leaders-page,
+.leaders-accueil *,
+.leaders-page * {
+    font-family: Arial, sans-serif !important;
+}
+.leaders-entete h2 {
+    letter-spacing: normal;
+    font-stretch: normal;
+}
+/* Même typographie pour Actualités et Leaders */
+
+.leaders-entete h2,
+.actus-accueil h2 {
+    font-family: Arial, sans-serif !important;
+    font-size: 30px !important;
+    font-weight: 700 !important;
+    letter-spacing: normal !important;
+    line-height: normal;
 }
