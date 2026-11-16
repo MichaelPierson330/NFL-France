@@ -1,312 +1,137 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <title>🏈 NFL France - Accueil</title>
 
-    <title>🏈NFL France - Accueil</title>
-
-    <link rel="stylesheet" href="style.css?v=2">
-    <link rel="stylesheet" href="actualite/actualites.html">
-    <script src="actualites.js" defer></script>
-    
-    
+    <link rel="stylesheet" href="style.css?v=5">
+    <script src="actualite.js" defer></script>
 </head>
-
 
 <body>
 
-    <!-- ========================= -->
-    <!-- EN-TÊTE DU SITE -->
-    <!-- ========================= -->
-
     <header>
-
         <div class="logo-nfl">
-            <h1>🏈NFL FRANCE</h1>
-            <p>FOOTBALL AMERICAIN</p>
+            <h1>🏈 NFL FRANCE</h1>
+            <p>FOOTBALL AMÉRICAIN</p>
         </div>
 
         <nav>
             <ul>
-                <li>
-                    <a href="index.html">Accueil</a>
-                </li>
-
-                <li>
-                    <a href="actualites.html">Actualités</a>
-                </li>
-
-                <li>
-                    <a href="videos.html">Vidéos</a>
-                </li>
-
-                <li>
-                    <a href="statistiques.html">Statistiques</a>
-                </li>
-                <li>
-                    <a href="fantasy.html">Fantasy</a>
-                </li>
+                <li><a href="index.html" class="actif">Accueil</a></li>
+                <li><a href="actualites.html">Actualités</a></li>
+                <li><a href="statistiques.html">Statistiques</a></li>
+                <li><a href="resultats.html">Résultats & Classements</a></li>
+                <li><a href="videos.html">Vidéos</a></li>
+                <li><a href="fantasy.html">Fantasy</a></li>
             </ul>
         </nav>
-
     </header>
 
+    <main>
 
-    <!-- ========================= -->
-    <!-- BANNIÈRE PRINCIPALE -->
-    <!-- ========================= -->
+        <section class="banniere">
+            <h1>Bienvenue sur NFL France</h1>
+            <p>
+                Retrouvez les dernières actualités,
+                les statistiques et les vidéos
+                du football américain.
+            </p>
+            <a href="actualites.html" class="bouton">
+                Découvrir les actualités
+            </a>
+        </section>
 
-    <section class="banniere">
+        <section class="joueurs-stars">
 
-        <h2>Toute l'actualité de la NFL</h2>
+            <h2>Les stars de la NFL</h2>
 
-        <p>
-            Actualités, statistiques, joueurs et résultats
-            du football américain.
-        </p>
+            <div class="liste-joueurs">
 
-        <a href="actualites.html" class="bouton">
-            Voir les actualités
-        </a>
+                <article class="carte-joueur">
+                    <img
+                        src="MAHOMES 2.jpg"
+                        alt="Patrick Mahomes"
+                        class="photo-joueur"
+                    >
 
-    </section>
+                    <h3>Patrick Mahomes</h3>
+                    <p>Kansas City Chiefs</p>
+                    <p>Quarterback</p>
 
+                    <a href="statistiques.html?joueur=Patrick%20Mahomes">
+                        Voir les statistiques
+                    </a>
+                </article>
 
-    <!-- ========================= -->
-    <!-- JOUEURS STARS -->
-    <!-- ========================= -->
+                <article class="carte-joueur">
+                    <img
+                        src="ALLEN 2.jpg"
+                        alt="Josh Allen"
+                        class="photo-joueur"
+                    >
 
-    <section class="joueurs-stars">
+                    <h3>Josh Allen</h3>
+                    <p>Buffalo Bills</p>
+                    <p>Quarterback</p>
 
-        <h2>🔥 Joueurs stars</h2>
+                    <a href="statistiques.html?joueur=Josh%20Allen">
+                        Voir les statistiques
+                    </a>
+                </article>
 
-        <div class="liste-joueurs">
+                <article class="carte-joueur">
+                    <img
+                        src="JEFFERSON 2.jpg"
+                        alt="Justin Jefferson"
+                        class="photo-joueur"
+                    >
 
+                    <h3>Justin Jefferson</h3>
+                    <p>Minnesota Vikings</p>
+                    <p>Wide Receiver</p>
 
-            <!-- PATRICK MAHOMES -->
-
-            <div class="carte-joueur">
-
-                <div class="photo-joueur">
-                    <img src="MAHOMES 2.jpg" alt="photo de mahomes">
-                </div>
-
-                <h3>Patrick Mahomes</h3>
-
-                <p>
-                    Kansas City Chiefs
-                </p>
-
-                <p>
-                    Quarterback
-                </p>
-
-                <a href="statistiques.html?joueur=Patrick%20Mahomes">
-    Voir ses statistiques
-</a>
-
-            </div>
-
-
-            <!-- JOSH ALLEN -->
-
-            <div class="carte-joueur">
-
-                <div class="photo-joueur">
-                    <img src="ALLEN 2.jpg" alt="photo de allen">
-                </div>
-
-                <h3>Josh Allen</h3>
-
-                <p>
-                    Buffalo Bills
-                </p>
-
-                <p>
-                    Quarterback
-                </p>
-
-                <a href="statistiques.html?joueur=Josh%20Allen">
-    Voir ses statistiques
-</a>
+                    <a href="statistiques.html?joueur=Justin%20Jefferson">
+                        Voir les statistiques
+                    </a>
+                </article>
 
             </div>
+        </section>
 
+        <section class="actus-accueil">
 
-            <!-- JUSTIN JEFFERSON -->
-
-            <div class="carte-joueur">
-
-                <div class="photo-joueur">
-                    <img src="JEFFERSON 2.jpg" alt="photo de jefferson">
-                </div>
-
-                <h3>Justin Jefferson</h3>
-
-                <p>
-                    Minnesota Vikings
-                </p>
-
-                <p>
-                    Wide Receiver
-                </p>
-
-                <a href="statistiques.html?joueur=Justin%20Jefferson">
-    Voir ses statistiques
-</a>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- ========================= -->
-    <!-- ACTUALITÉS -->
-    <!-- ========================= -->
-
-    <section class="actualites">
-
-        <h2>📰 Dernières actualités</h2>
-
-
-        <article class="article">
-
-            <h3>
-                Les dernières nouvelles de la NFL
-            </h3>
+            <h2>🏈 Les dernières actualités NFL</h2>
 
             <p>
-                Retrouvez les informations importantes,
-                les performances et les résultats
-                de la semaine en NFL.
+                Découvre les trois dernières actualités
+                du football américain.
             </p>
 
-            <a href="actualites.html">
-                Lire l'article
-            </a>
-
-        </article>
-
-
-        <article class="article">
-
-            <h3>
-                Les stars à suivre cette saison
-            </h3>
-
-            <p>
-                Quarterbacks, running backs et receivers :
-                découvrez les joueurs à suivre.
+            <p id="message-accueil">
+                Chargement des actualités NFL...
             </p>
 
-            <a href="joueurs.html">
-                Découvrir les joueurs
+            <div
+                id="dernieres-actus"
+                class="grille-actus">
+            </div>
+
+            <a href="actualites.html" class="bouton-actus">
+                Voir toutes les actualités
             </a>
 
-        </article>
+        </section>
 
-
-        <article class="article">
-
-            <h3>
-                La course aux playoffs
-            </h3>
-
-            <p>
-                Quelles équipes peuvent atteindre
-                les playoffs cette saison ?
-            </p>
-
-            <a href="actualites.html">
-                Lire l'article
-            </a>
-
-        </article>
-
-    </section>
-
-
-    <!-- ========================= -->
-    <!-- STATISTIQUES -->
-    <!-- ========================= -->
-
-    <section class="statistiques">
-
-        <h2>📊 Leaders NFL</h2>
-
-        <div class="stats-container">
-
-
-            <div class="stat">
-
-                <h3>Passes</h3>
-
-                <p>
-                    Meilleurs quarterbacks
-                </p>
-
-                <a href="statistiques.html">
-                    Voir le classement
-                </a>
-
-            </div>
-
-
-            <div class="stat">
-
-                <h3>Course</h3>
-
-                <p>
-                    Meilleurs running backs
-                </p>
-
-                <a href="statistiques.html">
-                    Voir le classement
-                </a>
-
-            </div>
-
-
-            <div class="stat">
-
-                <h3>Réceptions</h3>
-
-                <p>
-                    Meilleurs receivers
-                </p>
-
-                <a href="statistiques.html">
-                    Voir le classement
-                </a>
-
-            </div>
-
-
-        </div>
-
-    </section>
-
-
-    <!-- ========================= -->
-    <!-- PIED DE PAGE -->
-    <!-- ========================= -->
+    </main>
 
     <footer>
-
-        <p>
-            © 2026 NFL France - Site étudiant BTS SIO
-        </p>
-
+        <p>© 2026 NFL France — Site étudiant BTS SIO</p>
     </footer>
 
 </body>
-
 </html>

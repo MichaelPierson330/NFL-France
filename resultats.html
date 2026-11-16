@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Résultats & Classements - NFL France</title>
+  <link rel="stylesheet" href="style.css?v=6">
+  <script src="resultats.js" defer></script>
+</head>
+<body>
+
+<header>
+  <div class="logo-nfl">
+    <h1>🏈 NFL FRANCE</h1>
+    <p>FOOTBALL AMÉRICAIN</p>
+  </div>
+
+  <nav>
+    <ul>
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="actualites.html">Actualités</a></li>
+      <li><a href="statistiques.html">Statistiques</a></li>
+      <li><a href="resultats.html" class="actif">Résultats & Classements</a></li>
+      <li><a href="videos.html">Vidéos</a></li>
+      <li><a href="fantasy.html">Fantasy</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="resultats-page">
+  <h1>🏈 Résultats & Classements NFL</h1>
+  <p>Scores, statistiques des matchs et classements de la saison 2026.</p>
+
+  <div class="resultats-onglets">
+    <button type="button" id="onglet-resultats" class="actif">
+      Résultats
+    </button>
+    <button type="button" id="onglet-classements">
+      Classements
+    </button>
+  </div>
+
+  <section id="section-resultats">
+    <div class="resultats-filtres">
+      <label for="semaine">Journée :</label>
+      <select id="semaine"></select>
+    </div>
+
+    <p id="message-resultats" role="status">
+      Chargement des résultats…
+    </p>
+
+    <div id="liste-matchs" class="grille-matchs"></div>
+
+    <section id="details-match" hidden aria-live="polite"></section>
+  </section>
+
+  <section id="section-classements" hidden>
+    <div class="resultats-filtres">
+      <label for="conference">Conférence :</label>
+      <select id="conference">
+        <option value="afc">AFC</option>
+        <option value="nfc">NFC</option>
+      </select>
+
+      <label for="division">Division :</label>
+      <select id="division">
+        <option value="all">Toutes</option>
+        <option value="East">Est</option>
+        <option value="North">Nord</option>
+        <option value="South">Sud</option>
+        <option value="West">Ouest</option>
+      </select>
+    </div>
+
+    <p id="message-classements" role="status">
+      Chargement du classement…
+    </p>
+
+    <div id="tableaux-classements"></div>
+  </section>
+</main>
+
+<footer>
+  <p>© 2026 NFL France — Site étudiant BTS SIO</p>
+</footer>
+
+</body>
+</html>
