@@ -7,6 +7,8 @@
     <title>Statistiques - NFL France</title>
     <link rel="stylesheet" href="style.css">
     <script src="statistiques.js" defer></script>
+    <script src="leaders.js" defer></script>
+
     <link rel="preconnect" href="https://a.espncdn.com" crossorigin>
 </head>
 <body>
@@ -28,11 +30,13 @@
                 </li>
 
                 <li>
-                    <a href="videos.html">Vidéos</a>
-                </li>
-
-                <li>
                     <a href="statistiques.html">Statistiques</a>
+                </li>
+                <li>
+                    <a href="resultats.html">Resultats et Classements</a>
+                </li>
+                <li>
+                    <a href="videos.html">Vidéos</a>
                 </li>
                  <li>
                     <a href="fantasy.html">Fantasy</a>
@@ -86,11 +90,56 @@
         <section id="details-joueur" class="details-joueur" hidden>
         </section>
 
+<section class="leaders-page" id="classements-joueurs">
+
+    <div class="leaders-entete">
+        <div>
+            <h2>CLASSEMENTS NFL</h2>
+            <p>Les meilleurs joueurs de la saison 2026</p>
+        </div>
+    </div>
+
+    <label for="categorie-leaders">Choisir une catégorie :</label>
+
+    <select id="categorie-leaders">
+        <option value="passingYards">Verges à la passe</option>
+    </select>
+
+    <h3 id="titre-classement">Verges à la passe</h3>
+
+    <p id="message-classements-joueurs">
+        Chargement des classements...
+    </p>
+
+    <div id="classement-complet"></div>
+
+</section>
+
+
     </main>
 
     <footer>
         <p>© 2026 NFL France</p>
     </footer>
+
+<script>
+window.addEventListener("load", () => {
+
+    if (window.location.hash !== "#classements-joueurs") return;
+
+    const section = document.getElementById("classements-joueurs");
+
+    if (!section) return;
+
+    setTimeout(() => {
+        section.scrollIntoView({
+            behavior: "instant",
+            block: "start"
+        });
+    }, 700);
+
+});
+</script>
 
 </body>
 </html>

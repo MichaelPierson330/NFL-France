@@ -1,95 +1,429 @@
 
-/* NFL France — Résultats et classements 2026 */
+/* ==================================================
+   NFL FRANCE — RÉSULTATS & CLASSEMENTS
+   Saison 2026
+   Source de données : ESPN (non officielle)
+================================================== */
+
 const SAISON = 2026;
 const API = "https://site.api.espn.com/apis/site/v2/sports/football/nfl";
 
 const $ = id => document.getElementById(id);
-const texte = value => String(value ?? "");
-const echapper = value => texte(value).replace(
-  /[&<>"']/g,
-  c => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  }[c])
-);
 
-const nombre = value =>
-  value === undefined || value === null ? "—" : texte(value);
+/* ==================================================
+   OUTILS GÉNÉRAUX
+================================================== */
 
-const equipeNom = team =>
-  team?.displayName || team?.name || "Équipe";
+function echapper(value) {
+    return String(value ?? "").replace(/[&<>"']/g, c => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    }[c]));
+}
 
-const logo = team =>
-  team?.logo || team?.logos?.[0]?.href || "";
+function equipeNom(team) {
+    return team?.displayName || team?.name || "Équipe";
+}
 
-const logoHTML = team =>
-  logo(team)
-    ? `<img src="${echapper(logo(team))}" alt="" loading="lazy">`
-    : "";
+function logo(team) {
+    return team?.logo || team?.logos?.[0]?.href || "";
+}
 
-const statut = event =>
-  event?.status?.type?.shortDetail ||
-  event?.status?.type?.description ||
-  "Match";
+function logoHTML(team) {
+    const url = logo(team);
 
-const dateFR = iso =>
-  iso
-    ? new Intl.DateTimeFormat("fr-FR", {
+    return url
+        ? `<img src="${echapper(url)}" alt="" loading="lazy">`
+        : "";
+}
+
+function dateFR(date) {
+    if (!date) return "";
+
+    return new Intl.DateTimeFormat("fr-FR", {
         dateStyle: "medium",
         timeStyle: "short"
-      }).format(new Date(iso))
-    : "";
+    }).format(new Date(date));
+}
 
 async function charger(url) {
-  const response = await fetch(url);
+    const response = await fetch(url);
 
-  if (!response.ok) {
-    throw new Error("Erreur réseau");
-  }
+    if (!response.ok) {
+        throw new Error("Erreur de chargement des données");
+    }
 
-  return response.json();
+    return response.json();
 }
 
-/* ONGLET RÉSULTATS / CLASSEMENTS */
+/* ==================================================
+   TRADUCTION DES STATISTIQUES
+================================================== */
+
+const TRADUCTIONS_STATS = {
+
+    // Premiers essais
+    "1st downs": "Premiers essais",
+    "first downs": "Premiers essais",
+    "passing 1st downs": "Premiers essais à la passe",
+    "rushing 1st downs": "Premiers essais à la course",
+    "1st downs from penalties": "Premiers essais sur pénalité",
+
+    // Tentatives
+    "3rd down efficiency": "Réussite sur 3e tentative",
+    "4th down efficiency": "Réussite sur 4e tentative",
+    "third down efficiency": "Réussite sur 3e tentative",
+    "fourth down efficiency": "Réussite sur 4e tentative",
+    "3rd down": "Troisième tentative",
+    "4th down": "Quatrième tentative",
+
+    // Statistiques générales
+    "total plays": "Nombre total de jeux",
+    "plays": "Jeux offensifs",
+    "total drives": "Séries offensives",
+    "drives": "Séries offensives",
+    "total yards": "Yards totaux",
+    "yards per play": "Yards par jeu",
+    "yards per pass": "Yards par passe",
+    "yards per rush": "Yards par course",
+    "yards per carry": "Yards par course",
+    "net yards": "Yards nets",
+    "passing": "Yards à la passe",
+    "rushing": "Yards à la course",
+    "receiving": "Yards en réception",
+    "possession": "Temps de possession",
+    "time of possession": "Temps de possession",
+    "turnovers": "Pertes de balle",
+    "total turnovers": "Pertes de balle totales",
+    "points": "Points",
+    "total points": "Points totaux",
+
+    // Passe
+    "comp/att": "Passes réussies / tentées",
+    "cmp/att": "Passes réussies / tentées",
+    "c/att": "Passes réussies / tentées",
+    "completions/attempts": "Passes réussies / tentées",
+    "completions": "Passes réussies",
+    "passing completions": "Passes réussies",
+    "attempts": "Tentatives de passe",
+    "passing attempts": "Tentatives de passe",
+    "passing yards": "Yards à la passe",
+    "pass yards": "Yards à la passe",
+    "pass yds": "Yards à la passe",
+    "passing touchdowns": "Touchdowns à la passe",
+    "passing td": "Touchdowns à la passe",
+    "pass td": "Touchdowns à la passe",
+    "interceptions thrown": "Interceptions lancées",
+    "interceptions": "Interceptions",
+    "sacks-yards lost": "Sacks concédés – yards perdus",
+    "sacks - yards lost": "Sacks concédés – yards perdus",
+    "sacks taken": "Sacks subis",
+    "sack yards": "Yards perdus sur sacks",
+    "passer rating": "Évaluation du passeur",
+    "quarterback rating": "Évaluation du quarterback",
+    "completion percentage": "Pourcentage de passes réussies",
+    "longest pass": "Plus longue passe",
+    "long pass": "Plus longue passe",
+
+    // Course
+    "rushing attempts": "Courses tentées",
+    "rush attempts": "Courses tentées",
+    "rushing yards": "Yards à la course",
+    "rush yards": "Yards à la course",
+    "rush yds": "Yards à la course",
+    "rushing touchdowns": "Touchdowns à la course",
+    "rushing td": "Touchdowns à la course",
+    "rush td": "Touchdowns à la course",
+    "yards per carry": "Yards par course",
+    "longest rush": "Plus longue course",
+
+    // Réception
+    "receptions": "Réceptions",
+    "receiving yards": "Yards en réception",
+    "rec yards": "Yards en réception",
+    "receiving touchdowns": "Touchdowns en réception",
+    "receiving td": "Touchdowns en réception",
+    "rec td": "Touchdowns en réception",
+    "targets": "Cibles",
+    "yards per reception": "Yards par réception",
+    "longest reception": "Plus longue réception",
+
+    // Défense
+    "total tackles": "Plaquages totaux",
+    "tackles": "Plaquages",
+    "solo tackles": "Plaquages en solo",
+    "assisted tackles": "Plaquages assistés",
+    "tackles for loss": "Plaquages pour perte",
+    "passes defended": "Passes défendues",
+    "pass deflections": "Passes déviées",
+    "forced fumbles": "Fumbles provoqués",
+    "fumble recoveries": "Fumbles récupérés",
+    "interception return yards": "Yards sur retour d'interception",
+    "defensive touchdowns": "Touchdowns défensifs",
+
+    // Fumbles
+    "fumbles": "Fumbles",
+    "fumbles lost": "Fumbles perdus",
+    "lost fumbles": "Fumbles perdus",
+    "fum lost": "Fumbles perdus",
+
+    // Zone rouge
+    "red zone": "Zone rouge",
+    "red zone (made-att)": "Zone rouge (réussites / tentatives)",
+    "red zone efficiency": "Réussite en zone rouge",
+    "red zone attempts": "Tentatives en zone rouge",
+    "red zone touchdowns": "Touchdowns en zone rouge",
+
+    // Coups de pied
+    "field goals": "Buts de placement",
+    "field goals made": "Buts de placement réussis",
+    "field goals attempted": "Buts de placement tentés",
+    "extra points": "Transformations",
+    "extra points made": "Transformations réussies",
+    "punts": "Dégagements",
+    "punt yards": "Yards sur dégagement",
+    "punt average": "Moyenne des dégagements",
+    "net punting average": "Moyenne nette des dégagements",
+    "longest punt": "Plus long dégagement",
+    "kick returns": "Retours de coups de pied",
+    "kick return yards": "Yards sur retours de coups de pied",
+    "punt returns": "Retours de dégagement",
+    "punt return yards": "Yards sur retours de dégagement",
+
+    // Équipes spéciales
+    "defensive / special teams tds": "Touchdowns défensifs / équipes spéciales",
+    "defensive/special teams tds": "Touchdowns défensifs / équipes spéciales",
+    "special teams touchdowns": "Touchdowns des équipes spéciales",
+
+    // Pénalités
+    "penalties": "Pénalités",
+    "penalty": "Pénalité",
+    "penalty yards": "Yards de pénalité",
+    "penalties-yards": "Pénalités – yards",
+
+    // Divers
+    "average": "Moyenne",
+    "games played": "Matchs joués",
+    "yards": "Yards",
+    "touchdowns": "Touchdowns",
+    "td": "Touchdowns",
+    "yards per reception": "Yards par réception"
+};
+
+/* Traductions selon la catégorie du joueur */
+
+const TRADUCTIONS_ABREVIATIONS = {
+    passing: {
+        "cmp": "Passes réussies",
+        "comp": "Passes réussies",
+        "att": "Passes tentées",
+        "yds": "Yards à la passe",
+        "td": "Touchdowns à la passe",
+        "int": "Interceptions",
+        "sack": "Sacks subis",
+        "sacks": "Sacks subis",
+        "lng": "Plus longue passe",
+        "rtg": "Évaluation du passeur",
+        "qbr": "Note QBR",
+        "avg": "Moyenne"
+    },
+
+    rushing: {
+        "car": "Courses",
+        "att": "Courses tentées",
+        "yds": "Yards à la course",
+        "td": "Touchdowns à la course",
+        "avg": "Yards par course",
+        "lng": "Plus longue course",
+        "fum": "Fumbles"
+    },
+
+    receiving: {
+        "rec": "Réceptions",
+        "tgt": "Cibles",
+        "tgts": "Cibles",
+        "yds": "Yards en réception",
+        "td": "Touchdowns en réception",
+        "avg": "Yards par réception",
+        "lng": "Plus longue réception"
+    },
+
+    defensive: {
+        "tot": "Plaquages totaux",
+        "tkl": "Plaquages",
+        "solo": "Plaquages en solo",
+        "ast": "Plaquages assistés",
+        "sck": "Sacks",
+        "sacks": "Sacks",
+        "tfl": "Plaquages pour perte",
+        "pd": "Passes défendues",
+        "ff": "Fumbles provoqués",
+        "fr": "Fumbles récupérés",
+        "int": "Interceptions",
+        "yds": "Yards"
+    },
+
+    kicking: {
+        "fg": "Buts de placement",
+        "fgm": "Buts de placement réussis",
+        "fga": "Buts de placement tentés",
+        "xp": "Transformations",
+        "xpm": "Transformations réussies",
+        "xpa": "Transformations tentées",
+        "yds": "Yards",
+        "lng": "Plus longue distance",
+        "pct": "Pourcentage de réussite"
+    },
+
+    punting: {
+        "punts": "Dégagements",
+        "yds": "Yards sur dégagement",
+        "avg": "Moyenne",
+        "lng": "Plus long dégagement"
+    }
+};
+
+function traduireStat(label, categorie = "") {
+    if (!label) return "Statistique";
+
+    const cle = String(label)
+        .trim()
+        .toLowerCase()
+        .replace(/[–—]/g, "-")
+        .replace(/\s+/g, " ");
+
+    const abreviations = TRADUCTIONS_ABREVIATIONS[categorie];
+
+    if (abreviations && abreviations[cle]) {
+        return abreviations[cle];
+    }
+
+    return TRADUCTIONS_STATS[cle] || label;
+}
+
+/* ==================================================
+   TRADUCTION DES DESCRIPTIONS DE MATCH
+================================================== */
+
+function traduireDescription(phrase) {
+    if (!phrase) return "Description non disponible";
+
+    const remplacements = [
+        [/\bTouchdown\b/gi, "Touchdown"],
+        [/\binterception\b/gi, "interception"],
+        [/\bintercepted\b/gi, "interceptée"],
+        [/\bsacked\b/gi, "plaqué derrière la ligne"],
+        [/\bsack\b/gi, "sack"],
+        [/\bfumble recovered\b/gi, "ballon récupéré après un fumble"],
+        [/\bfumble\b/gi, "fumble"],
+        [/\bfield goal\b/gi, "but de placement"],
+        [/\bextra point\b/gi, "transformation"],
+        [/\bkickoff\b/gi, "coup d'envoi"],
+        [/\bpunt\b/gi, "dégagement"],
+        [/\bpass complete\b/gi, "passe réussie"],
+        [/\bpass incomplete\b/gi, "passe incomplète"],
+        [/\bcomplete pass\b/gi, "passe réussie"],
+        [/\bincomplete pass\b/gi, "passe incomplète"],
+        [/\bpass\b/gi, "passe"],
+        [/\brush\b/gi, "course"],
+        [/\brushing\b/gi, "course"],
+        [/\breception\b/gi, "réception"],
+        [/\btackled\b/gi, "plaqué"],
+        [/\btackle\b/gi, "plaquage"],
+        [/\byards\b/gi, "yards"],
+        [/\byard\b/gi, "yard"],
+        [/\bfirst down\b/gi, "premier essai"],
+        [/\bsecond down\b/gi, "deuxième tentative"],
+        [/\bthird down\b/gi, "troisième tentative"],
+        [/\bfourth down\b/gi, "quatrième tentative"],
+        [/\bred zone\b/gi, "zone rouge"],
+        [/\bpenalty\b/gi, "pénalité"],
+        [/\bholding\b/gi, "retenue"],
+        [/\bfalse start\b/gi, "faux départ"],
+        [/\bdefensive pass interference\b/gi, "interférence défensive"],
+        [/\bpass interference\b/gi, "interférence de passe"],
+        [/\bpersonal foul\b/gi, "faute personnelle"],
+        [/\bunsportsmanlike conduct\b/gi, "comportement antisportif"],
+        [/\bno gain\b/gi, "aucun gain"],
+        [/\bloss of\b/gi, "perte de"],
+        [/\bfor a touchdown\b/gi, "pour un touchdown"],
+        [/\bquarter\b/gi, "quart-temps"],
+        [/\bend of game\b/gi, "fin du match"],
+        [/\bend of half\b/gi, "fin de la mi-temps"]
+    ];
+
+    let resultat = String(phrase);
+
+    for (const [motif, remplacement] of remplacements) {
+        resultat = resultat.replace(motif, remplacement);
+    }
+
+    return resultat;
+}
+
+function traduireStatut(statut) {
+    const traductions = {
+        "final": "Terminé",
+        "scheduled": "À venir",
+        "in progress": "En cours",
+        "halftime": "Mi-temps",
+        "end of period": "Fin du quart-temps",
+        "postponed": "Reporté",
+        "canceled": "Annulé",
+        "cancelled": "Annulé"
+    };
+
+    return traductions[String(statut || "").toLowerCase()] || statut || "Match";
+}
+
+/* ==================================================
+   ONGLET RÉSULTATS / CLASSEMENTS
+================================================== */
 
 function onglet(nom) {
-  $("section-resultats").hidden = nom !== "resultats";
-  $("section-classements").hidden = nom !== "classements";
+    $("section-resultats").hidden = nom !== "resultats";
+    $("section-classements").hidden = nom !== "classements";
 
-  $("onglet-resultats").classList.toggle(
-    "actif", nom === "resultats"
-  );
+    $("onglet-resultats").classList.toggle(
+        "actif",
+        nom === "resultats"
+    );
 
-  $("onglet-classements").classList.toggle(
-    "actif", nom === "classements"
-  );
+    $("onglet-classements").classList.toggle(
+        "actif",
+        nom === "classements"
+    );
 
-  if (
-    nom === "classements" &&
-    !$("tableaux-classements").dataset.loaded
-  ) {
-    afficherClassements();
-  }
+    if (
+        nom === "classements" &&
+        !$("tableaux-classements").dataset.loaded
+    ) {
+        afficherClassements();
+    }
 }
 
-$("onglet-resultats").addEventListener(
-  "click", () => onglet("resultats")
-);
+$("onglet-resultats").addEventListener("click", () => {
+    onglet("resultats");
+});
 
-$("onglet-classements").addEventListener(
-  "click", () => onglet("classements")
-);
+$("onglet-classements").addEventListener("click", () => {
+    onglet("classements");
+});
 
-/* CHOIX DES SEMAINES */
+/* ==================================================
+   CHOIX DE LA SEMAINE
+================================================== */
 
-for (let n = 1; n <= 18; n++) {
-  const option = document.createElement("option");
-  option.value = n;
-  option.textContent = `Week ${n}`;
-  $("semaine").append(option);
+for (let semaine = 1; semaine <= 18; semaine++) {
+    const option = document.createElement("option");
+
+    option.value = semaine;
+    option.textContent = `Journée ${semaine}`;
+
+    $("semaine").append(option);
 }
 
 $("semaine").value = "10";
@@ -98,491 +432,645 @@ $("semaine").addEventListener("change", afficherMatchs);
 $("conference").addEventListener("change", afficherClassements);
 $("division").addEventListener("change", afficherClassements);
 
-/* RÉSULTATS DES MATCHS */
+/* ==================================================
+   RÉSULTATS DES MATCHS
+================================================== */
 
 async function afficherMatchs() {
-  const week = $("semaine").value;
+    const semaine = $("semaine").value;
 
-  $("message-resultats").textContent =
-    `Chargement des matchs de la Week ${week}…`;
-
-  $("liste-matchs").replaceChildren();
-  $("details-match").hidden = true;
-
-  try {
-    const data = await charger(
-      `${API}/scoreboard?dates=${SAISON}&seasontype=2&week=${week}&limit=50`
-    );
-
-    const events = data.events || [];
-
-    $("message-resultats").textContent = events.length
-      ? `${events.length} match(s) — Week ${week}`
-      : "Aucun match trouvé pour cette semaine.";
-
-    events.sort(
-      (a, b) => new Date(a.date) - new Date(b.date)
-    );
-
-    for (const event of events) {
-      const competitors =
-        event.competitions?.[0]?.competitors || [];
-
-      const away =
-        competitors.find(x => x.homeAway === "away") ||
-        competitors[0];
-
-      const home =
-        competitors.find(x => x.homeAway === "home") ||
-        competitors[1];
-
-      if (!away || !home) continue;
-
-      const score = c =>
-        event.status?.type?.completed ||
-        event.status?.type?.state === "in"
-          ? nombre(c.score)
-          : "–";
-
-      const card = document.createElement("button");
-      card.type = "button";
-      card.className = "carte-match";
-
-      card.innerHTML = `
-        <small>
-          ${echapper(dateFR(event.date))}
-          · ${echapper(statut(event))}
-        </small>
-
-        <div class="equipes-match">
-          <span class="equipe-match">
-            ${logoHTML(away.team)}
-            <span>
-              ${echapper(
-                away.team?.shortDisplayName ||
-                equipeNom(away.team)
-              )}
-            </span>
-          </span>
-
-          <span class="score-match">
-            ${echapper(score(away))}
-            -
-            ${echapper(score(home))}
-          </span>
-
-          <span class="equipe-match">
-            <span>
-              ${echapper(
-                home.team?.shortDisplayName ||
-                equipeNom(home.team)
-              )}
-            </span>
-            ${logoHTML(home.team)}
-          </span>
-        </div>
-
-        <small>Voir les statistiques du match</small>
-      `;
-
-      card.addEventListener(
-        "click",
-        () => afficherDetails(event.id)
-      );
-
-      $("liste-matchs").append(card);
-    }
-  } catch (error) {
     $("message-resultats").textContent =
-      "Impossible de charger les résultats. Vérifie ta connexion ou réessaie plus tard.";
-    console.error(error);
-  }
-}
+        `Chargement des matchs de la journée ${semaine}…`;
 
-/* TABLEAUX DES STATISTIQUES */
+    $("liste-matchs").replaceChildren();
+    $("details-match").hidden = true;
 
-function tableau(headers, rows) {
-  if (!rows.length) {
-    return "<p>Aucune statistique disponible.</p>";
-  }
-
-  return `
-    <div class="tableau-scroll">
-      <table class="tableau-nfl">
-        <thead>
-          <tr>
-            ${headers.map(h =>
-              `<th>${echapper(h)}</th>`
-            ).join("")}
-          </tr>
-        </thead>
-        <tbody>
-          ${rows.map(row => `
-            <tr>
-              ${row.map(cell =>
-                `<td>${echapper(cell)}</td>`
-              ).join("")}
-            </tr>
-          `).join("")}
-        </tbody>
-      </table>
-    </div>
-  `;
-}
-
-/* DÉTAILS D'UN MATCH */
-
-async function afficherDetails(id) {
-  const target = $("details-match");
-
-  target.hidden = false;
-  target.innerHTML =
-    "<p>Chargement des statistiques du match…</p>";
-
-  target.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
-
-  try {
-    const data = await charger(
-      `${API}/summary?event=${encodeURIComponent(id)}`
-    );
-
-    const header = data.header?.competitions?.[0];
-    const comps = header?.competitors || [];
-
-    const away =
-      comps.find(x => x.homeAway === "away") || comps[0];
-
-    const home =
-      comps.find(x => x.homeAway === "home") || comps[1];
-
-    let html = `
-      <h2>
-        ${echapper(equipeNom(away?.team))}
-        ${echapper(nombre(away?.score))}
-        –
-        ${echapper(nombre(home?.score))}
-        ${echapper(equipeNom(home?.team))}
-      </h2>
-    `;
-
-    const teamStats = data.boxscore?.teams || [];
-
-    if (teamStats.length) {
-      html += "<h3>Statistiques des équipes</h3>";
-
-      const keys = [
-        ...new Set(
-          teamStats.flatMap(t =>
-            (t.statistics || []).map(s => s.name)
-          )
-        )
-      ];
-
-      const labels = new Map(
-        teamStats.flatMap(t =>
-          (t.statistics || []).map(s => [
-            s.name,
-            s.label || s.name
-          ])
-        )
-      );
-
-      html += tableau(
-        [
-          "Statistique",
-          ...teamStats.map(t => equipeNom(t.team))
-        ],
-        keys.map(k => [
-          labels.get(k),
-          ...teamStats.map(t =>
-            t.statistics?.find(s => s.name === k)
-              ?.displayValue ?? "—"
-          )
-        ])
-      );
-    }
-
-    /* STATISTIQUES DES JOUEURS */
-
-    const players = data.boxscore?.players || [];
-
-    const nomsCategories = {
-      passing: "Passes",
-      rushing: "Courses",
-      receiving: "Réceptions",
-      defensive: "Défense",
-      kicking: "Coups de pied",
-      punting: "Dégagements",
-      interceptions: "Interceptions"
-    };
-
-    for (const team of players) {
-      html += `
-        <h3>
-          ${echapper(equipeNom(team.team))}
-          — joueurs
-        </h3>
-      `;
-
-      for (const group of team.statistics || []) {
-        const headers = group.labels || [];
-
-        const rows = (group.athletes || []).map(a => [
-          a.athlete?.displayName || "Joueur",
-          ...(a.stats || [])
-        ]);
-
-        if (!rows.length) continue;
-
-        html += `
-          <div class="stats-bloc">
-            <h4>
-              ${echapper(
-                nomsCategories[group.name] ||
-                group.displayName ||
-                group.name ||
-                "Statistiques"
-              )}
-            </h4>
-            ${tableau(["Joueur", ...headers], rows)}
-          </div>
-        `;
-      }
-    }
-
-    /* ACTIONS QUI RAPPORTENT DES POINTS */
-
-    const scoring = (data.scoringPlays || []).filter(
-      p => p.scoringType || p.text
-    );
-
-    if (scoring.length) {
-      html += "<h3>Actions qui ont rapporté des points</h3>";
-
-      html += tableau(
-        ["Période", "Temps", "Action"],
-        scoring.map(p => [
-          p.period?.number
-            ? `Q${p.period.number}`
-            : "—",
-          p.clock?.displayValue || "—",
-          p.text || "—"
-        ])
-      );
-    }
-
-    /* DÉROULEMENT DES POSSESSIONS */
-
-    const drives = data.drives?.previous || [];
-
-    if (drives.length) {
-      html += "<h3>Déroulement des possessions</h3>";
-
-      html += tableau(
-        ["Équipe", "Résultat", "Résumé"],
-        drives.map(d => [
-          d.team?.displayName ||
-            d.team?.abbreviation || "—",
-          d.displayResult || d.result || "—",
-          d.description ||
-            d.shortDisplayResult || "—"
-        ])
-      );
-    }
-
-    if (
-      !teamStats.length &&
-      !players.length &&
-      !scoring.length
-    ) {
-      html += `
-        <p>
-          Les statistiques détaillées ne sont
-          pas encore disponibles pour ce match.
-        </p>
-      `;
-    }
-
-    target.innerHTML = html;
-  } catch (error) {
-    target.textContent =
-      "Impossible de charger les statistiques de ce match pour le moment.";
-    console.error(error);
-  }
-}
-
-/* EXTRACTION DES CLASSEMENTS */
-
-function extraireGroupes(node, results = []) {
-  if (Array.isArray(node)) {
-    node.forEach(n => extraireGroupes(n, results));
-    return results;
-  }
-
-  if (!node || typeof node !== "object") {
-    return results;
-  }
-
-  if (Array.isArray(node.standings?.entries)) {
-    results.push({
-      name: node.name || node.abbreviation || "",
-      entries: node.standings.entries
-    });
-  }
-
-  if (node.children) {
-    extraireGroupes(node.children, results);
-  }
-
-  return results;
-}
-
-function valeurStat(entry, names) {
-  const stats = entry.stats || [];
-
-  const stat = stats.find(s =>
-    names.includes(s.name) ||
-    names.includes(s.abbreviation)
-  );
-
-  return stat?.displayValue ??
-    (stat?.value === undefined
-      ? "—"
-      : texte(stat.value));
-}
-
-/* CLASSEMENTS AFC / NFC */
-
-async function afficherClassements() {
-  const conference = $("conference").value;
-  const division = $("division").value;
-
-  $("message-classements").textContent =
-    "Chargement du classement…";
-
-  $("tableaux-classements").replaceChildren();
-
-  try {
-    const data = await charger(
-      `https://site.api.espn.com/apis/v2/sports/football/nfl/standings?season=${SAISON}&type=2`
-    );
-
-    const groups = extraireGroupes(data.children || data);
-
-    const confGroup = groups.find(g =>
-      g.name.toLowerCase().includes(conference)
-    );
-
-    const confNames = conference === "afc"
-      ? ["afc", "american"]
-      : ["nfc", "national"];
-
-    const chosen = groups.filter(g => {
-      const name = g.name.toLowerCase();
-
-      const inConf =
-        confNames.some(c => name.includes(c)) ||
-        (
-          confGroup &&
-          confGroup.entries.some(e =>
-            g.entries.some(
-              x => x.team?.id === e.team?.id
-            )
-          )
+    try {
+        const data = await charger(
+            `${API}/scoreboard?dates=${SAISON}&seasontype=2&week=${semaine}&limit=50`
         );
 
-      return inConf && (
-        division === "all"
-          ? /east|north|south|west/i.test(g.name)
-          : name.includes(division.toLowerCase())
-      );
+        const matchs = data.events || [];
+
+        $("message-resultats").textContent = matchs.length
+            ? `${matchs.length} match(s) — Journée ${semaine}`
+            : "Aucun match trouvé pour cette journée.";
+
+        matchs.sort((a, b) =>
+            new Date(a.date) - new Date(b.date)
+        );
+
+        for (const match of matchs) {
+            const equipes =
+                match.competitions?.[0]?.competitors || [];
+
+            const exterieur =
+                equipes.find(e => e.homeAway === "away") || equipes[0];
+
+            const domicile =
+                equipes.find(e => e.homeAway === "home") || equipes[1];
+
+            if (!exterieur || !domicile) continue;
+
+            const termine = match.status?.type?.completed;
+
+            const score = equipe =>
+                termine ? String(equipe.score ?? "—") : "–";
+
+            const carte = document.createElement("button");
+
+            carte.type = "button";
+            carte.className = "carte-match";
+
+            carte.innerHTML = `
+                <small>
+                    ${echapper(dateFR(match.date))}
+                    · ${echapper(traduireStatut(
+                        match.status?.type?.description
+                    ))}
+                </small>
+
+                <div class="equipes-match">
+                    <span class="equipe-match">
+                        ${logoHTML(exterieur.team)}
+                        <span>
+                            ${echapper(
+                                exterieur.team?.shortDisplayName ||
+                                equipeNom(exterieur.team)
+                            )}
+                        </span>
+                    </span>
+
+                    <span class="score-match">
+                        ${echapper(score(exterieur))}
+                        -
+                        ${echapper(score(domicile))}
+                    </span>
+
+                    <span class="equipe-match">
+                        <span>
+                            ${echapper(
+                                domicile.team?.shortDisplayName ||
+                                equipeNom(domicile.team)
+                            )}
+                        </span>
+                        ${logoHTML(domicile.team)}
+                    </span>
+                </div>
+
+                <small>Voir les statistiques du match</small>
+            `;
+
+            carte.addEventListener("click", () => {
+                afficherDetails(match.id);
+            });
+
+            $("liste-matchs").append(carte);
+        }
+
+    } catch (erreur) {
+        console.error(erreur);
+
+        $("message-resultats").textContent =
+            "Impossible de charger les résultats. Vérifie ta connexion ou réessaie plus tard.";
+    }
+}
+
+/* ==================================================
+   TABLEAU DES STATISTIQUES DES ÉQUIPES
+================================================== */
+
+function tableau(entetes, lignes) {
+    if (!lignes.length) {
+        return "<p>Aucune statistique disponible.</p>";
+    }
+
+    return `
+        <div class="tableau-scroll">
+            <table class="tableau-nfl">
+                <thead>
+                    <tr>
+                        ${entetes.map(entete => `
+                            <th>${echapper(traduireStat(entete))}</th>
+                        `).join("")}
+                    </tr>
+                </thead>
+
+                <tbody>
+                    ${lignes.map(ligne => `
+                        <tr>
+                            ${ligne.map(cellule => `
+                                <td>${echapper(cellule)}</td>
+                            `).join("")}
+                        </tr>
+                    `).join("")}
+                </tbody>
+            </table>
+        </div>
+    `;
+}
+
+/* ==================================================
+   PHOTOS DES JOUEURS
+================================================== */
+
+function photoJoueur(athlete) {
+    const headshot = athlete?.headshot;
+
+    if (typeof headshot === "string") {
+        return headshot;
+    }
+
+    if (headshot && typeof headshot === "object") {
+        return headshot.href || headshot.url || "";
+    }
+
+    return athlete?.image || "";
+}
+
+/* ==================================================
+   TABLEAUX INDIVIDUELS AVEC PHOTOS
+================================================== */
+
+function tableauJoueurs(entetes, athletes, categorie) {
+    if (!athletes.length) {
+        return "<p>Aucune statistique disponible.</p>";
+    }
+
+    const lignes = athletes.map(joueur => {
+        const athlete = joueur.athlete || {};
+        const nom = athlete.displayName || "Joueur";
+        const photo = photoJoueur(athlete);
+
+        const image = photo
+            ? `
+                <img
+                    src="${echapper(photo)}"
+                    alt="${echapper(nom)}"
+                    class="photo-stat-joueur"
+                    loading="lazy"
+                    onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+                >
+                <span class="photo-stat-vide" style="display:none;">🏈</span>
+            `
+            : `<span class="photo-stat-vide">🏈</span>`;
+
+        return `
+            <tr>
+                <td>
+                    <div class="joueur-stat-identite">
+                        ${image}
+                        <span>${echapper(nom)}</span>
+                    </div>
+                </td>
+
+                ${(joueur.stats || []).map(stat => `
+                    <td>${echapper(stat)}</td>
+                `).join("")}
+            </tr>
+        `;
+    }).join("");
+
+    return `
+        <div class="tableau-scroll">
+            <table class="tableau-nfl">
+                <thead>
+                    <tr>
+                        ${entetes.map(entete => `
+                            <th>${echapper(
+                                traduireStat(entete, categorie)
+                            )}</th>
+                        `).join("")}
+                    </tr>
+                </thead>
+
+                <tbody>
+                    ${lignes}
+                </tbody>
+            </table>
+        </div>
+    `;
+}
+
+/* ==================================================
+   DÉTAILS ET STATISTIQUES D'UN MATCH
+================================================== */
+
+async function afficherDetails(id) {
+    const cible = $("details-match");
+
+    cible.hidden = false;
+    cible.innerHTML =
+        "<p>Chargement des statistiques du match…</p>";
+
+    cible.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
     });
 
-    let displayGroups = chosen;
+    try {
+        const data = await charger(
+            `${API}/summary?event=${encodeURIComponent(id)}`
+        );
 
-    if (
-      !displayGroups.length &&
-      confGroup &&
-      division === "all"
-    ) {
-      displayGroups = [confGroup];
+        const competition = data.header?.competitions?.[0];
+        const equipes = competition?.competitors || [];
+
+        const exterieur =
+            equipes.find(e => e.homeAway === "away") || equipes[0];
+
+        const domicile =
+            equipes.find(e => e.homeAway === "home") || equipes[1];
+
+        let html = `
+            <h2>
+                ${echapper(equipeNom(exterieur?.team))}
+                ${echapper(exterieur?.score ?? "—")}
+                –
+                ${echapper(domicile?.score ?? "—")}
+                ${echapper(equipeNom(domicile?.team))}
+            </h2>
+        `;
+
+        /* STATISTIQUES DES ÉQUIPES */
+
+        const statistiquesEquipes = data.boxscore?.teams || [];
+
+        if (statistiquesEquipes.length) {
+            html += "<h3>Statistiques des équipes</h3>";
+
+            const cles = [
+                ...new Set(
+                    statistiquesEquipes.flatMap(equipe =>
+                        (equipe.statistics || []).map(stat => stat.name)
+                    )
+                )
+            ];
+
+            const labels = new Map(
+                statistiquesEquipes.flatMap(equipe =>
+                    (equipe.statistics || []).map(stat => [
+                        stat.name,
+                        traduireStat(stat.label || stat.name)
+                    ])
+                )
+            );
+
+            const lignes = cles.map(cle => [
+                labels.get(cle) || traduireStat(cle),
+
+                ...statistiquesEquipes.map(equipe =>
+                    equipe.statistics?.find(stat =>
+                        stat.name === cle
+                    )?.displayValue ?? "—"
+                )
+            ]);
+
+            html += tableau(
+                [
+                    "Statistique",
+                    ...statistiquesEquipes.map(equipe =>
+                        equipeNom(equipe.team)
+                    )
+                ],
+                lignes
+            );
+        }
+
+        /* STATISTIQUES DES JOUEURS */
+
+        const joueurs = data.boxscore?.players || [];
+
+        for (const equipe of joueurs) {
+            html += `
+                <h3>
+                    ${echapper(equipeNom(equipe.team))}
+                    — Statistiques des joueurs
+                </h3>
+            `;
+
+            for (const groupe of equipe.statistics || []) {
+                const categorie = groupe.name || "";
+
+                const athletes = (groupe.athletes || []).map(joueur => ({
+                    athlete: joueur.athlete,
+                    stats: joueur.stats || []
+                }));
+
+                if (!athletes.length) continue;
+
+                const titres = {
+                    passing: "Statistiques à la passe",
+                    rushing: "Statistiques à la course",
+                    receiving: "Statistiques en réception",
+                    defensive: "Statistiques défensives",
+                    kicking: "Coups de pied",
+                    punting: "Dégagements",
+                    interceptions: "Interceptions"
+                };
+
+                html += `
+                    <div class="stats-bloc">
+                        <h4>
+                            ${echapper(
+                                titres[categorie] ||
+                                groupe.displayName ||
+                                "Statistiques des joueurs"
+                            )}
+                        </h4>
+
+                        ${tableauJoueurs(
+                            ["Joueur", ...(groupe.labels || [])],
+                            athletes,
+                            categorie
+                        )}
+                    </div>
+                `;
+            }
+        }
+
+        /* ACTIONS QUI ONT RAPPORTE DES POINTS */
+
+        const actions = (data.scoringPlays || []).filter(action =>
+            action.scoringType || action.text
+        );
+
+        if (actions.length) {
+            html += "<h3>Actions qui ont rapporté des points</h3>";
+
+            html += tableau(
+                ["Période", "Temps", "Action"],
+                actions.map(action => [
+                    action.period?.number
+                        ? `Quart-temps ${action.period.number}`
+                        : "—",
+
+                    action.clock?.displayValue || "—",
+
+                    traduireDescription(action.text || "")
+                ])
+            );
+        }
+
+        /* DÉROULEMENT DES POSSESSIONS */
+
+        const possessions = data.drives?.previous || [];
+
+        if (possessions.length) {
+            html += "<h3>Déroulement des possessions</h3>";
+
+            html += tableau(
+                ["Équipe", "Résultat", "Résumé"],
+                possessions.map(possession => [
+                    possession.team?.displayName ||
+                    possession.team?.abbreviation ||
+                    "—",
+
+                    traduireDescription(
+                        possession.displayResult ||
+                        possession.result ||
+                        "—"
+                    ),
+
+                    traduireDescription(
+                        possession.description ||
+                        possession.shortDisplayResult ||
+                        "—"
+                    )
+                ])
+            );
+        }
+
+        if (
+            !statistiquesEquipes.length &&
+            !joueurs.length &&
+            !actions.length &&
+            !possessions.length
+        ) {
+            html += `
+                <p>
+                    Les statistiques détaillées ne sont pas encore
+                    disponibles pour ce match.
+                </p>
+            `;
+        }
+
+        cible.innerHTML = html;
+
+    } catch (erreur) {
+        console.error(erreur);
+
+        cible.innerHTML = `
+            <p>
+                Impossible de charger les statistiques de ce match
+                pour le moment.
+            </p>
+        `;
     }
-
-    if (!displayGroups.length) {
-      $("message-classements").textContent =
-        "Classement indisponible pour ce filtre.";
-      return;
-    }
-
-    $("message-classements").textContent =
-      `Classement ${conference.toUpperCase()} — saison ${SAISON}`;
-
-    for (const group of displayGroups) {
-      const container = document.createElement("section");
-
-      const heading = document.createElement("h2");
-      heading.textContent = group.name;
-      container.append(heading);
-
-      const rows = [...group.entries].sort(
-        (a, b) =>
-          Number(valeurStat(b, ["winPercent", "PCT"])) -
-          Number(valeurStat(a, ["winPercent", "PCT"]))
-      );
-
-      const div = document.createElement("div");
-      div.className = "tableau-scroll";
-
-      div.innerHTML = `
-        <table class="tableau-nfl">
-          <thead>
-            <tr>
-              <th>Équipe</th>
-              <th>V</th>
-              <th>D</th>
-              <th>N</th>
-              <th>%</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${rows.map(entry => `
-              <tr>
-                <td>
-                  ${logoHTML(entry.team)}
-                  ${echapper(equipeNom(entry.team))}
-                </td>
-                <td>
-                  ${echapper(valeurStat(entry, ["wins", "W"]))}
-                </td>
-                <td>
-                  ${echapper(valeurStat(entry, ["losses", "L"]))}
-                </td>
-                <td>
-                  ${echapper(valeurStat(entry, ["ties", "T"]))}
-                </td>
-                <td>
-                  ${echapper(valeurStat(entry, ["winPercent", "PCT"]))}
-                </td>
-              </tr>
-            `).join("")}
-          </tbody>
-        </table>
-      `;
-
-      container.append(div);
-      $("tableaux-classements").append(container);
-    }
-
-    $("tableaux-classements").dataset.loaded = "1";
-
-  } catch (error) {
-    $("message-classements").textContent =
-      "Impossible de charger les classements. La source de données peut être temporairement indisponible.";
-    console.error(error);
-  }
 }
+
+/* ==================================================
+   CLASSEMENTS AFC / NFC
+================================================== */
+
+function extraireGroupes(noeud, resultats = []) {
+    if (Array.isArray(noeud)) {
+        noeud.forEach(element =>
+            extraireGroupes(element, resultats)
+        );
+
+        return resultats;
+    }
+
+    if (!noeud || typeof noeud !== "object") {
+        return resultats;
+    }
+
+    if (Array.isArray(noeud.standings?.entries)) {
+        resultats.push({
+            name: noeud.name || noeud.abbreviation || "",
+            entries: noeud.standings.entries
+        });
+    }
+
+    if (noeud.children) {
+        extraireGroupes(noeud.children, resultats);
+    }
+
+    return resultats;
+}
+
+function valeurStat(entree, noms) {
+    const statistiques = entree.stats || [];
+
+    const stat = statistiques.find(element =>
+        noms.includes(element.name) ||
+        noms.includes(element.abbreviation)
+    );
+
+    return stat?.displayValue ??
+        (stat?.value === undefined ? "—" : String(stat.value));
+}
+
+async function afficherClassements() {
+    const conference = $("conference").value;
+    const division = $("division").value;
+
+    $("message-classements").textContent =
+        "Chargement du classement…";
+
+    $("tableaux-classements").replaceChildren();
+    $("tableaux-classements").dataset.loaded = "";
+
+    try {
+        const data = await charger(
+            `https://site.api.espn.com/apis/v2/sports/football/nfl/standings?season=${SAISON}&type=2`
+        );
+
+        const groupes = extraireGroupes(data.children || data);
+
+        const groupeConference = groupes.find(groupe =>
+            groupe.name.toLowerCase().includes(conference)
+        );
+
+        const nomsConference = conference === "afc"
+            ? ["afc", "american"]
+            : ["nfc", "national"];
+
+        const groupesChoisis = groupes.filter(groupe => {
+            const nom = groupe.name.toLowerCase();
+
+            const bonneConference =
+                nomsConference.some(nomConf =>
+                    nom.includes(nomConf)
+                ) ||
+                (
+                    groupeConference &&
+                    groupeConference.entries.some(entree =>
+                        groupe.entries.some(element =>
+                            element.team?.id === entree.team?.id
+                        )
+                    )
+                );
+
+            const bonneDivision = division === "all"
+                ? /east|north|south|west/i.test(nom)
+                : nom.includes(division.toLowerCase());
+
+            return bonneConference && bonneDivision;
+        });
+
+        let groupesAffiches = groupesChoisis;
+
+        if (
+            !groupesAffiches.length &&
+            groupeConference &&
+            division === "all"
+        ) {
+            groupesAffiches = [groupeConference];
+        }
+
+        if (!groupesAffiches.length) {
+            $("message-classements").textContent =
+                "Classement indisponible pour ce filtre.";
+
+            return;
+        }
+
+        $("message-classements").textContent =
+            `Classement ${conference.toUpperCase()} — saison ${SAISON}`;
+
+        const nomsDivisions = {
+            east: "Est",
+            north: "Nord",
+            south: "Sud",
+            west: "Ouest"
+        };
+
+        for (const groupe of groupesAffiches) {
+            const section = document.createElement("section");
+
+            const titre = document.createElement("h2");
+            const nomGroupe = groupe.name.toLowerCase();
+
+            titre.textContent =
+                nomsDivisions[nomGroupe] || groupe.name;
+
+            section.append(titre);
+
+            const lignes = [...groupe.entries].sort((a, b) =>
+                Number(valeurStat(b, ["winPercent", "PCT"])) -
+                Number(valeurStat(a, ["winPercent", "PCT"]))
+            );
+
+            const conteneur = document.createElement("div");
+            conteneur.className = "tableau-scroll";
+
+            conteneur.innerHTML = `
+                <table class="tableau-nfl">
+                    <thead>
+                        <tr>
+                            <th>Équipe</th>
+                            <th>Victoires</th>
+                            <th>Défaites</th>
+                            <th>Égalités</th>
+                            <th>% de victoires</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        ${lignes.map(entree => `
+                            <tr>
+                                <td>
+                                    ${logoHTML(entree.team)}
+                                    ${echapper(equipeNom(entree.team))}
+                                </td>
+
+                                <td>
+                                    ${echapper(
+                                        valeurStat(entree, ["wins", "W"])
+                                    )}
+                                </td>
+
+                                <td>
+                                    ${echapper(
+                                        valeurStat(entree, ["losses", "L"])
+                                    )}
+                                </td>
+
+                                <td>
+                                    ${echapper(
+                                        valeurStat(entree, ["ties", "T"])
+                                    )}
+                                </td>
+
+                                <td>
+                                    ${echapper(
+                                        valeurStat(entree, ["winPercent", "PCT"])
+                                    )}
+                                </td>
+                            </tr>
+                        `).join("")}
+                    </tbody>
+                </table>
+            `;
+
+            section.append(conteneur);
+            $("tableaux-classements").append(section);
+        }
+
+        $("tableaux-classements").dataset.loaded = "1";
+
+    } catch (erreur) {
+        console.error(erreur);
+
+        $("message-classements").textContent =
+            "Impossible de charger les classements. Réessaie plus tard.";
+    }
+}
+
+/* ==================================================
+   LANCEMENT DE LA PAGE
+================================================== */
 
 afficherMatchs();

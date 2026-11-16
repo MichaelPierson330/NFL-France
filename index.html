@@ -10,6 +10,7 @@
 
     <link rel="stylesheet" href="style.css?v=5">
     <script src="actualite.js" defer></script>
+    <script src="leaders.js" defer></script>
 </head>
 
 <body>
@@ -34,18 +35,22 @@
 
     <main>
 
+        <!-- BANNIÈRE D'ACCUEIL -->
         <section class="banniere">
             <h1>Bienvenue sur NFL France</h1>
+
             <p>
                 Retrouvez les dernières actualités,
                 les statistiques et les vidéos
                 du football américain.
             </p>
+
             <a href="actualites.html" class="bouton">
                 Découvrir les actualités
             </a>
         </section>
 
+        <!-- JOUEURS STARS -->
         <section class="joueurs-stars">
 
             <h2>Les stars de la NFL</h2>
@@ -53,11 +58,9 @@
             <div class="liste-joueurs">
 
                 <article class="carte-joueur">
-                    <img
-                        src="MAHOMES 2.jpg"
-                        alt="Patrick Mahomes"
-                        class="photo-joueur"
-                    >
+                    <img src="MAHOMES 2.jpg"
+                         alt="Patrick Mahomes"
+                         class="photo-joueur">
 
                     <h3>Patrick Mahomes</h3>
                     <p>Kansas City Chiefs</p>
@@ -69,11 +72,9 @@
                 </article>
 
                 <article class="carte-joueur">
-                    <img
-                        src="ALLEN 2.jpg"
-                        alt="Josh Allen"
-                        class="photo-joueur"
-                    >
+                    <img src="ALLEN 2.jpg"
+                         alt="Josh Allen"
+                         class="photo-joueur">
 
                     <h3>Josh Allen</h3>
                     <p>Buffalo Bills</p>
@@ -85,11 +86,9 @@
                 </article>
 
                 <article class="carte-joueur">
-                    <img
-                        src="JEFFERSON 2.jpg"
-                        alt="Justin Jefferson"
-                        class="photo-joueur"
-                    >
+                    <img src="JEFFERSON 2.jpg"
+                         alt="Justin Jefferson"
+                         class="photo-joueur">
 
                     <h3>Justin Jefferson</h3>
                     <p>Minnesota Vikings</p>
@@ -103,6 +102,30 @@
             </div>
         </section>
 
+        <!-- LEADERS NFL -->
+        <section class="leaders-accueil">
+
+            <div class="leaders-entete">
+                <div>
+                    <h2>LES LEADERS NFL</h2>
+                    <p>Les meilleurs joueurs de la saison 2026</p>
+                </div>
+
+                <a href="statistiques.html#classements-joueurs"
+                   class="bouton-tous-classements">
+                    Tous les classements
+                </a>
+            </div>
+
+            <p id="message-leaders">
+                Chargement des classements NFL...
+            </p>
+
+            <div id="apercu-leaders"></div>
+
+        </section>
+
+        <!-- ACTUALITÉS -->
         <section class="actus-accueil">
 
             <h2>🏈 Les dernières actualités NFL</h2>
@@ -116,10 +139,7 @@
                 Chargement des actualités NFL...
             </p>
 
-            <div
-                id="dernieres-actus"
-                class="grille-actus">
-            </div>
+            <div id="dernieres-actus" class="grille-actus"></div>
 
             <a href="actualites.html" class="bouton-actus">
                 Voir toutes les actualités
@@ -132,6 +152,72 @@
     <footer>
         <p>© 2026 NFL France — Site étudiant BTS SIO</p>
     </footer>
+
+    <!-- POP-UP FANTASY -->
+    <div id="popup-fantasy" class="popup-fantasy-overlay">
+
+        <div class="popup-fantasy">
+
+            <button class="popup-fantasy-fermer"
+                    id="fermer-popup-fantasy"
+                    aria-label="Fermer">
+                &times;
+            </button>
+
+            <span class="popup-fantasy-badge">NOUVEAUTÉ</span>
+
+            <h2>🏈 La Fantasy débarque sur NFL France !</h2>
+
+            <p>
+                Notre nouvelle rubrique Fantasy est officiellement ouverte !
+                Crée ton équipe, sélectionne tes joueurs et relève le défi
+                de la Fantasy à la française.
+            </p>
+
+            <a href="fantasy.html" class="popup-fantasy-bouton">
+                Découvrir la Fantasy
+            </a>
+
+            <button class="popup-fantasy-plus-tard"
+                    id="popup-fantasy-plus-tard">
+                Peut-être plus tard
+            </button>
+
+        </div>
+    </div>
+
+    <!-- GESTION DU POP-UP -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const popup = document.getElementById("popup-fantasy");
+            const fermer = document.getElementById("fermer-popup-fantasy");
+            const plusTard = document.getElementById("popup-fantasy-plus-tard");
+
+            if (!popup || !fermer || !plusTard) return;
+
+            if (!sessionStorage.getItem("popupFantasyVu")) {
+                setTimeout(() => {
+                    popup.style.display = "flex";
+                }, 1000);
+            }
+
+            function fermerPopup() {
+                popup.style.display = "none";
+                sessionStorage.setItem("popupFantasyVu", "oui");
+            }
+
+            fermer.addEventListener("click", fermerPopup);
+            plusTard.addEventListener("click", fermerPopup);
+
+            popup.addEventListener("click", (event) => {
+                if (event.target === popup) {
+                    fermerPopup();
+                }
+            });
+
+        });
+    </script>
 
 </body>
 </html>
