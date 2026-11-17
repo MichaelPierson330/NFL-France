@@ -8,13 +8,12 @@
     box-sizing: border-box;
 }
 
-body {
+ body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background: #f4f4f4 url("fond-nfl.png") center center / cover fixed no-repeat;
     color: #222;
     line-height: 1.5;
 }
-
 img {
     max-width: 100%;
 }
@@ -3283,4 +3282,641 @@ footer {
     font-weight: 700 !important;
     letter-spacing: normal !important;
     line-height: normal;
+}
+/* FOND STADE NFL SUR TOUT LE SITE */
+
+.actualites {
+    background-color: rgba(255, 255, 255, 0.82);
+}
+
+/* Conserver les cartes bien lisibles */
+.carte-joueur,
+.carte-actualite,
+.carte-joueur-stats,
+.carte-video,
+.bloc-leader,
+.carte-match {
+    background-color: #fff;
+}
+/* Sections transparentes pour laisser voir le stade */
+
+.joueurs-stars,
+.statistiques,
+.page-actualites,
+.page-stats,
+.contenu,
+.leaders-accueil,
+.leaders-page,
+.resultats-page {
+    background: transparent;
+}
+
+/* Les cartes restent lisibles */
+.carte-joueur,
+.carte-actualite,
+.carte-joueur-stats,
+.carte-video,
+.bloc-leader,
+.carte-match {
+    background-color: white;
+}
+/* Fond stade visible sur tout le site */
+
+.joueurs-stars,
+.statistiques,
+.page-actualites,
+.page-stats,
+.contenu,
+.leaders-accueil,
+.leaders-page,
+.resultats-page {
+    background: rgba(244, 244, 244, 0.20) !important;
+}
+
+/* Garder les zones de contenu lisibles */
+
+.actualites {
+    background: rgba(255, 255, 255, 0.78) !important;
+}
+
+.carte-joueur,
+.carte-actualite,
+.carte-joueur-stats,
+.carte-video,
+.bloc-leader,
+.carte-match {
+    background: #fff !important;
+}
+/* CORRECTION FOND NFL */
+
+body {
+    background-image: url("Footballfield.jpg");
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-color: #172338;
+}
+
+/* Sections transparentes */
+
+.joueurs-stars,
+.statistiques,
+.leaders-accueil,
+.leaders-page,
+.actus-accueil,
+.page-actualites,
+.page-stats,
+.contenu,
+.resultats-page {
+    background: rgba(15, 25, 42, 0.20) !important;
+}
+
+/* Cartes lisibles */
+
+.carte-joueur,
+.carte-actualite,
+.carte-joueur-stats,
+.carte-video,
+.bloc-leader,
+.carte-match {
+    background: rgba(255, 255, 255, 0.94) !important;
+}
+
+/* =================================
+   LISIBILITÉ DES TEXTES - NFL FRANCE
+================================= */
+
+/* Titres des différentes sections */
+.joueurs-stars h2,
+.statistiques h2,
+.actus-accueil h2,
+.leaders-accueil h2,
+.leaders-page h1,
+.leaders-page h2,
+.categorie-leaders h3,
+#titre-classement,
+.resultats-page h1 {
+    color: #ffffff !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+}
+
+/* Textes secondaires sur le fond stade */
+.leaders-entete p,
+.page-stats p,
+.page-actualites p {
+    color: #eeeeee;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Titres des vidéos */
+.videos-page h1,
+.videos-page h2,
+.videos-page h3 {
+    color: #ffffff !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+}
+
+/* Garder les textes des cartes bien lisibles */
+.carte-joueur,
+.carte-actualite,
+.carte-joueur-stats,
+.carte-video,
+.bloc-leader,
+.carte-match {
+    color: #222222;
+    text-shadow: none;
+}
+
+/* Améliorer la lisibilité des textes dans les cartes */
+.bloc-leader strong,
+.carte-joueur h3,
+.carte-actualite h3 {
+    color: #1d3557;
+}
+/* TITRES AU-DESSUS DES CARTES */
+
+.actus-accueil h2,
+.actualites h2,
+.joueurs-stars h2,
+.leaders-entete h2,
+.categorie-leaders h3,
+.statistiques h2,
+.videos-page h1,
+.videos-page h2,
+.page-stats h1,
+.page-actualites h1,
+.resultats-page h1 {
+    color: #ffffff !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* Sous-titres sur le fond du stade */
+
+.leaders-entete p,
+.page-stats > p,
+.page-actualites > p {
+    color: #eeeeee !important;
+}
+
+/* SOUS-TITRES SUR LE FOND DU STADE */
+
+.actus-accueil > p,
+.actualites > p,
+.joueurs-stars > p,
+.statistiques > p,
+.videos-page > p,
+.page-stats > p,
+.page-actualites > p,
+.leaders-entete p {
+    color: #ffffff !important;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* Titres et descriptions des sections */
+.actus-accueil h2,
+.joueurs-stars h2,
+.statistiques h2,
+.leaders-entete h2 {
+    color: #ffffff !important;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* =========================================
+   NFL FRANCE - TEXTES SUR LE FOND DU STADE
+   CORRECTION GLOBALE
+========================================= */
+
+/* TITRES PRINCIPAUX DE TOUTES LES PAGES */
+
+.page-actualites h1,
+.page-actualites h2,
+.page-stats h1,
+.page-stats h2,
+.page-stats h3,
+.resultats-page h1,
+.resultats-page h2,
+.leaders-page h1,
+.leaders-page h2,
+.leaders-accueil h2,
+.leaders-entete h2,
+.joueurs-stars h2,
+.statistiques h2,
+.actus-accueil h2,
+.videos-page h1,
+.videos-page h2,
+.videos-page h3,
+.categorie-leaders h3,
+#titre-classement {
+    color: #ffffff !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* SOUS-TITRES ET DESCRIPTIONS DES SECTIONS */
+
+.page-actualites > p,
+.page-stats > p,
+.resultats-page > p,
+.leaders-entete p,
+.videos-page > p,
+.joueurs-stars > p,
+.statistiques > p,
+.actus-accueil > p {
+    color: #f1f1f1 !important;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* TEXTES DANS LES CARTES : ON CONSERVE LE NOIR */
+
+.carte-joueur,
+.carte-actualite,
+.carte-joueur-stats,
+.carte-video,
+.bloc-leader,
+.carte-match {
+    color: #222222 !important;
+    text-shadow: none !important;
+}
+
+.carte-joueur h3,
+.carte-actualite h3,
+.carte-joueur-stats h3,
+.carte-video h3,
+.bloc-leader h3,
+.carte-match h3 {
+    color: #172b49 !important;
+    text-shadow: none !important;
+}
+
+.carte-joueur p,
+.carte-actualite p,
+.carte-joueur-stats p,
+.carte-video p,
+.bloc-leader p,
+.carte-match p {
+    color: #444444 !important;
+    text-shadow: none !important;
+}
+
+/* ==========================================
+   NFL FRANCE - CORRECTION GLOBALE DES TEXTES
+========================================== */
+
+/* ACCUEIL */
+.accueil > h2,
+.accueil > p,
+.joueurs-stars > h2,
+.actus-accueil > h2,
+.actus-accueil > p,
+.leaders-accueil > h2,
+.leaders-entete h2,
+.leaders-accueil h3,
+.leaders-page h1,
+.leaders-page h2,
+.leaders-page h3 {
+    color: #ffffff !important;
+    text-shadow: 0 2px 7px rgba(0,0,0,0.9) !important;
+}
+
+/* TITRES ET SOUS-TITRES DES PAGES */
+.page-actualites > h1,
+.page-actualites > h2,
+.page-actualites > p,
+.page-stats h1,
+.page-stats h2,
+.page-stats h3,
+.banniere-stats h2,
+.banniere-stats p,
+.contenu > h2,
+.banniere h1,
+.banniere h2,
+.banniere > p,
+.resultats-page > h1,
+.resultats-page > p {
+    color: #ffffff !important;
+    text-shadow: 0 2px 7px rgba(0,0,0,0.9) !important;
+}
+
+/* RÉSULTATS ET CLASSEMENTS */
+.resultats-filtres label,
+#message-resultats,
+#message-classements,
+#message-actualites {
+    color: #ffffff !important;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.9) !important;
+}
+
+/* VIDÉOS */
+.contenu > h2,
+.contenu > p {
+    color: #ffffff !important;
+}
+
+/* CARTES : GARDER LES TEXTES FONCÉS */
+.carte-match,
+.carte-joueur,
+.carte-joueur-stats,
+.carte-actualite,
+.carte-video,
+.bloc-leader {
+    text-shadow: none !important;
+}
+
+.carte-match small,
+.carte-match span,
+.carte-match p {
+    color: #444444;
+    text-shadow: none;
+}
+
+
+/* ======================================================
+   NFL FRANCE - BANNIERE D'ACCUEIL AVEC JOUEURS SUR LES COTES
+   Correctif final : joueurs plus petits et entièrement
+   contenus dans la bannière.
+====================================================== */
+
+.banniere {
+    position: relative;
+    min-height: 430px;
+    padding: 65px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    isolation: isolate;
+    text-align: center;
+    color: #ffffff;
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(4, 14, 30, 0.30) 0%,
+            rgba(4, 14, 30, 0.42) 65%,
+            #07172b 100%
+        ),
+        url("fond-nfl.png") center 55% / cover no-repeat;
+}
+
+.banniere::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        rgba(4, 14, 30, 0.18),
+        rgba(4, 14, 30, 0.48) 50%,
+        rgba(4, 14, 30, 0.18)
+    );
+    z-index: 0;
+    pointer-events: none;
+}
+
+.banniere-contenu {
+    position: relative;
+    z-index: 3;
+    width: min(100%, 760px);
+    margin: 0 auto;
+    padding: 15px 20px;
+    text-align: center;
+}
+
+.banniere-contenu h1 {
+    color: #ffffff;
+    font-size: clamp(30px, 4vw, 48px);
+    line-height: 1.15;
+    margin-bottom: 18px;
+    text-shadow: 0 3px 10px rgba(0, 0, 0, 0.9);
+}
+
+.banniere-contenu p {
+    color: #ffffff;
+    font-size: clamp(15px, 1.6vw, 19px);
+    line-height: 1.5;
+    margin-bottom: 24px;
+    text-shadow: 0 2px 7px rgba(0, 0, 0, 0.95);
+}
+
+.banniere-joueur {
+    position: absolute !important;
+    z-index: 2;
+    bottom: 0 !important;
+    height: 62% !important;
+    max-height: 285px !important;
+    width: auto !important;
+    max-width: 22% !important;
+    object-fit: contain !important;
+    object-position: center bottom !important;
+    display: block;
+    pointer-events: none;
+    filter: drop-shadow(0 5px 12px rgba(0, 0, 0, 0.45));
+}
+
+.banniere-joueur.joueur-gauche {
+    left: 2% !important;
+    right: auto !important;
+}
+
+.banniere-joueur.joueur-droite {
+    right: 2% !important;
+    left: auto !important;
+}
+
+.banniere .bouton {
+    position: relative;
+    z-index: 4;
+    padding: 13px 26px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+@media (max-width: 900px) {
+    .banniere {
+        min-height: 400px;
+    }
+
+    .banniere-joueur {
+        height: 52% !important;
+        max-height: 220px !important;
+        max-width: 25% !important;
+        opacity: 0.85;
+    }
+
+    .banniere-contenu {
+        max-width: 620px;
+    }
+}
+
+@media (max-width: 600px) {
+    .banniere {
+        min-height: 360px;
+        padding: 45px 12px;
+    }
+
+    .banniere-joueur {
+        height: 40% !important;
+        max-height: 150px !important;
+        max-width: 31% !important;
+        opacity: 0.42;
+    }
+
+    .banniere-contenu {
+        padding: 10px;
+    }
+
+    .banniere-contenu h1 {
+        font-size: 28px;
+    }
+
+    .banniere-contenu p {
+        font-size: 14px;
+    }
+}
+
+
+/* ======================================================
+   NFL FRANCE - NOUVEL EN-TÊTE BLEU NUIT
+   Surcharge volontairement placée en fin de fichier
+====================================================== */
+
+header.entete,
+.entete,
+header:has(.logo-nfl) {
+    background: linear-gradient(110deg, #071326 0%, #102747 55%, #081629 100%) !important;
+    color: #fff !important;
+    border-bottom: 1px solid rgba(96, 165, 250, 0.35);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+    padding: 14px 5% !important;
+    gap: 24px;
+}
+
+.entete .logo-nfl,
+header:has(.logo-nfl) .logo-nfl {
+    margin: 0 !important;
+    padding: 13px 28px !important;
+    background: linear-gradient(135deg, #1d4f91, #12315b) !important;
+    border: 1px solid rgba(147, 197, 253, 0.65) !important;
+    border-radius: 12px;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
+}
+
+.entete .logo-nfl h1,
+header:has(.logo-nfl) .logo-nfl h1 {
+    color: #fff !important;
+}
+
+.entete .logo-nfl p,
+header:has(.logo-nfl) .logo-nfl p {
+    color: #dbeafe !important;
+}
+
+.entete nav,
+header:has(.logo-nfl) nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px !important;
+    flex-wrap: wrap;
+}
+
+.entete nav ul,
+header:has(.logo-nfl) nav ul {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px !important;
+    flex-wrap: wrap;
+    list-style: none;
+}
+
+.entete nav a,
+header:has(.logo-nfl) nav a {
+    display: inline-block;
+    padding: 10px 15px;
+    color: #eaf2ff !important;
+    background: rgba(35, 73, 119, 0.58);
+    border: 1px solid rgba(147, 197, 253, 0.2);
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+
+.entete nav a:hover,
+header:has(.logo-nfl) nav a:hover {
+    color: #fff !important;
+    background: #2563a6 !important;
+    border-color: #60a5fa;
+    transform: translateY(-2px);
+}
+
+.entete nav a.actif,
+header:has(.logo-nfl) nav a.actif {
+    color: #fff !important;
+    background: linear-gradient(135deg, #2878c7, #18549a) !important;
+    border-color: #93c5fd;
+    box-shadow: 0 3px 12px rgba(37, 99, 235, 0.3);
+}
+
+@media (max-width: 800px) {
+    header.entete,
+    .entete,
+    header:has(.logo-nfl) {
+        padding: 16px 4% !important;
+    }
+
+    .entete nav,
+    header:has(.logo-nfl) nav,
+    .entete nav ul,
+    header:has(.logo-nfl) nav ul {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .entete nav a,
+    header:has(.logo-nfl) nav a {
+        padding: 8px 10px;
+        font-size: 13px;
+    }
+}
+
+/* ======================================================
+   BANNIÈRE D'ACCUEIL - JOUEURS BEAUCOUP PLUS GRANDS
+====================================================== */
+
+.banniere-joueur {
+    height: 88% !important;
+    max-height: 410px !important;
+    max-width: 30% !important;
+    width: auto !important;
+    object-fit: contain !important;
+    object-position: center bottom !important;
+}
+
+.banniere-joueur.joueur-gauche {
+    left: 1% !important;
+}
+
+.banniere-joueur.joueur-droite {
+    right: 1% !important;
+}
+
+@media (max-width: 900px) {
+    .banniere-joueur {
+        height: 75% !important;
+        max-height: 310px !important;
+        max-width: 31% !important;
+        opacity: 0.95;
+    }
+}
+
+@media (max-width: 600px) {
+    .banniere-joueur {
+        height: 55% !important;
+        max-height: 205px !important;
+        max-width: 35% !important;
+        opacity: 0.72;
+    }
 }
