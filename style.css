@@ -3775,148 +3775,819 @@ body {
 
 
 /* ======================================================
-   NFL FRANCE - NOUVEL EN-TÊTE BLEU NUIT
-   Surcharge volontairement placée en fin de fichier
+   NFL FRANCE — REFONTE RESPONSIVE MOBILE
+   Ajouté en fin de fichier : conserve les règles existantes
+   et harmonise toutes les rubriques sur téléphone.
 ====================================================== */
 
-header.entete,
-.entete,
-header:has(.logo-nfl) {
-    background: linear-gradient(110deg, #071326 0%, #102747 55%, #081629 100%) !important;
-    color: #fff !important;
-    border-bottom: 1px solid rgba(96, 165, 250, 0.35);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
-    padding: 14px 5% !important;
-    gap: 24px;
+:root {
+    --nfl-navy: #061326;
+    --nfl-navy-2: #0b1d35;
+    --nfl-panel: #10243d;
+    --nfl-panel-2: #142d4b;
+    --nfl-blue: #1677e8;
+    --nfl-blue-light: #39a0ff;
+    --nfl-red: #e63946;
+    --nfl-text: #f4f7fb;
+    --nfl-muted: #b8c7d9;
+    --nfl-border: rgba(133, 174, 219, .22);
 }
 
-.entete .logo-nfl,
-header:has(.logo-nfl) .logo-nfl {
+html {
+    width: 100%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+body {
+    width: 100%;
+    min-width: 320px;
+    overflow-x: hidden;
+    background-color: var(--nfl-navy) !important;
+    background-image:
+        linear-gradient(rgba(3, 13, 28, .58), rgba(3, 13, 28, .68)),
+        url("Footballfield.jpg") !important;
+    background-position: center top !important;
+    background-size: cover !important;
+    background-attachment: scroll !important;
+    color: var(--nfl-text);
+}
+
+img, iframe, video {
+    max-width: 100%;
+}
+
+button, a, input, select {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* En-tête partagé par les pages */
+body > header,
+body > .entete,
+header.entete {
+    position: relative;
+    z-index: 20;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 22px;
+    width: 100%;
+    padding: 14px clamp(16px, 4vw, 48px);
+    background: linear-gradient(110deg, #071326 0%, #102b4c 55%, #071326 100%) !important;
+    border-bottom: 1px solid var(--nfl-border);
+    box-shadow: 0 8px 28px rgba(0,0,0,.24);
+}
+
+header .logo-nfl,
+.entete .logo-nfl {
     margin: 0 !important;
-    padding: 13px 28px !important;
-    background: linear-gradient(135deg, #1d4f91, #12315b) !important;
-    border: 1px solid rgba(147, 197, 253, 0.65) !important;
+    padding: 10px 18px !important;
+    flex: 0 0 auto;
+    background: linear-gradient(135deg, #123b69, #071a31) !important;
+    border: 1px solid rgba(107, 174, 245, .48) !important;
     border-radius: 12px;
-    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.3);
-    flex-shrink: 0;
+    box-shadow: 0 5px 18px rgba(0,0,0,.25);
 }
 
-.entete .logo-nfl h1,
-header:has(.logo-nfl) .logo-nfl h1 {
+header .logo-nfl h1,
+.entete .logo-nfl h1 {
     color: #fff !important;
+    font-size: clamp(21px, 2.5vw, 32px) !important;
+    line-height: 1.1;
+    letter-spacing: 1.5px !important;
 }
 
-.entete .logo-nfl p,
-header:has(.logo-nfl) .logo-nfl p {
-    color: #dbeafe !important;
+header .logo-nfl p,
+.entete .logo-nfl p {
+    color: #d7e8fb !important;
+    font-size: 9px !important;
+    letter-spacing: 2px !important;
 }
 
-.entete nav,
-header:has(.logo-nfl) nav {
+header nav,
+.entete nav {
+    min-width: 0;
+}
+
+header nav ul,
+.entete nav ul {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 10px !important;
     flex-wrap: wrap;
-}
-
-.entete nav ul,
-header:has(.logo-nfl) nav ul {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 10px !important;
-    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
     list-style: none;
 }
 
-.entete nav a,
-header:has(.logo-nfl) nav a {
-    display: inline-block;
-    padding: 10px 15px;
-    color: #eaf2ff !important;
-    background: rgba(35, 73, 119, 0.58);
-    border: 1px solid rgba(147, 197, 253, 0.2);
-    border-radius: 8px;
-    text-decoration: none;
+header nav a,
+.entete nav a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 9px 13px;
+    color: #eaf3ff !important;
+    background: rgba(24, 65, 108, .58);
+    border: 1px solid var(--nfl-border);
+    border-radius: 9px;
+    font-size: 13px;
     font-weight: 700;
-    transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    text-decoration: none;
+    transition: background .2s ease, border-color .2s ease;
 }
 
+header nav a:hover,
+header nav a.actif,
 .entete nav a:hover,
-header:has(.logo-nfl) nav a:hover {
+.entete nav a.actif {
     color: #fff !important;
-    background: #2563a6 !important;
-    border-color: #60a5fa;
-    transform: translateY(-2px);
+    background: linear-gradient(135deg, #1677e8, #1256a8) !important;
+    border-color: #62b2ff !important;
 }
 
-.entete nav a.actif,
-header:has(.logo-nfl) nav a.actif {
-    color: #fff !important;
-    background: linear-gradient(135deg, #2878c7, #18549a) !important;
-    border-color: #93c5fd;
-    box-shadow: 0 3px 12px rgba(37, 99, 235, 0.3);
+/* Titres et sections sur fond sombre */
+main {
+    width: 100%;
+    min-width: 0;
 }
 
-@media (max-width: 800px) {
-    header.entete,
-    .entete,
-    header:has(.logo-nfl) {
-        padding: 16px 4% !important;
+.joueurs-stars,
+.statistiques,
+.page-actualites,
+.page-stats,
+.contenu,
+.leaders-accueil,
+.leaders-page,
+.resultats-page,
+.actus-accueil {
+    color: var(--nfl-text);
+}
+
+.joueurs-stars h2,
+.statistiques h2,
+.actus-accueil h2,
+.leaders-entete h2,
+.page-actualites h1,
+.page-actualites h2,
+.page-stats h1,
+.page-stats h2,
+.resultats-page h1,
+.resultats-page h2,
+.contenu > h2,
+.categorie-leaders h3,
+#titre-classement {
+    color: #fff !important;
+    text-shadow: 0 2px 10px rgba(0,0,0,.65) !important;
+}
+
+/* Cartes communes */
+.carte-joueur,
+.carte-actualite,
+.carte-joueur-stats,
+.carte-video,
+.bloc-leader,
+.carte-match {
+    min-width: 0;
+    border: 1px solid var(--nfl-border) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,.22) !important;
+}
+
+/* Bannière d'accueil : texte et joueurs restent lisibles */
+.banniere {
+    background-color: #07172b;
+    border-bottom: 1px solid var(--nfl-border);
+}
+
+.banniere-contenu h1,
+.banniere-contenu p {
+    color: #fff !important;
+}
+
+.banniere .bouton,
+.bouton,
+.bouton-video,
+.bouton-actus,
+.bouton-tous-classements {
+    min-height: 44px;
+    font-weight: 800;
+}
+
+/* Cartes des stars */
+.joueurs-stars .liste-joueurs {
+    align-items: stretch;
+}
+
+.joueurs-stars .carte-joueur {
+    background: #f5f7fb !important;
+    color: #172b49 !important;
+}
+
+.joueurs-stars .carte-joueur h3 {
+    color: #172b49 !important;
+}
+
+.joueurs-stars .carte-joueur p {
+    color: #536174 !important;
+}
+
+/* Actualités et vidéos */
+.carte-actualite,
+.carte-video {
+    background: #10243d !important;
+    color: #f4f7fb !important;
+}
+
+.contenu-actualite h3,
+.infos-video h3 {
+    color: #fff !important;
+}
+
+.contenu-actualite p,
+.date-actualite,
+.infos-video p {
+    color: #bdcce0 !important;
+}
+
+.contenu-actualite a {
+    color: #62b2ff !important;
+}
+
+/* Statistiques, leaders et résultats */
+.carte-joueur-stats,
+.bloc-leader,
+.carte-match,
+#details-match {
+    background: #10243d !important;
+    color: #f4f7fb !important;
+}
+
+.carte-joueur-stats h3,
+.bloc-leader strong,
+.leader-identite strong,
+.carte-match h3,
+#details-match h2,
+#details-match h3 {
+    color: #fff !important;
+}
+
+.carte-joueur-stats p,
+.leader-identite span,
+.carte-match small {
+    color: #bdcce0 !important;
+}
+
+.tableau-nfl,
+.tableau-statistiques {
+    color: #f4f7fb;
+}
+
+.tableau-nfl {
+    background: #10243d !important;
+}
+
+.tableau-nfl td,
+.tableau-statistiques td {
+    border-color: var(--nfl-border) !important;
+}
+
+.tableau-nfl tr:nth-child(even),
+.tableau-statistiques tr:nth-child(even) {
+    background: rgba(255,255,255,.035);
+}
+
+.tableau-nfl th {
+    background: #155ba7 !important;
+}
+
+/* Fantasy : panneaux cohérents avec la maquette */
+.fantasy-hero,
+.fantasy-panel {
+    background: linear-gradient(145deg, #10243d, #0b1b30) !important;
+    color: #f4f7fb !important;
+    border: 1px solid var(--nfl-border) !important;
+    box-shadow: 0 8px 26px rgba(0,0,0,.22) !important;
+}
+
+.fantasy-panel h2,
+.fantasy-panel h3,
+.fantasy-toolbar h2 {
+    color: #fff !important;
+}
+
+.fantasy-form label,
+.manager-select {
+    color: #dce9f8 !important;
+}
+
+.fantasy-tabs a {
+    background: #10243d !important;
+    color: #eaf3ff !important;
+    border-color: var(--nfl-border) !important;
+}
+
+.fantasy-tabs a:hover {
+    background: #1677e8 !important;
+}
+
+.player-row,
+.roster-row,
+.matchup,
+.history-row {
+    background: rgba(255,255,255,.045) !important;
+    color: #eaf3ff !important;
+    border-color: var(--nfl-border) !important;
+}
+
+.player-row strong,
+.roster-row strong {
+    color: #fff !important;
+}
+
+.player-row small,
+.roster-row small,
+.fantasy-hint,
+#draft-status {
+    color: #b8c7d9 !important;
+}
+
+/* Formulaires et boutons */
+input, select, textarea {
+    max-width: 100%;
+}
+
+button, .bouton, .bouton-actus, .bouton-video,
+.bouton-tous-classements, .carte-joueur a {
+    touch-action: manipulation;
+}
+
+footer {
+    background: #050e1c !important;
+    border-top: 1px solid var(--nfl-border);
+    color: #c8d7e8 !important;
+}
+
+/* Tablette */
+@media (max-width: 900px) {
+    .grille-joueurs-stats,
+    .grille-leaders,
+    #classement-complet {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .entete nav,
-    header:has(.logo-nfl) nav,
-    .entete nav ul,
-    header:has(.logo-nfl) nav ul {
-        justify-content: center;
+    .grille-videos,
+    .grille-actualites,
+    .grille-actus {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
+/* Téléphone */
 @media (max-width: 600px) {
-    .entete nav a,
-    header:has(.logo-nfl) nav a {
-        padding: 8px 10px;
+    body {
+        background-attachment: scroll !important;
+    }
+
+    body > header,
+    body > .entete,
+    header.entete {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 13px;
+        padding: max(12px, env(safe-area-inset-top)) 13px 14px !important;
+    }
+
+    header .logo-nfl,
+    .entete .logo-nfl {
+        align-self: center;
+        margin: 0 !important;
+        padding: 9px 16px !important;
+    }
+
+    header .logo-nfl h1,
+    .entete .logo-nfl h1 {
+        font-size: 23px !important;
+    }
+
+    header nav,
+    .entete nav {
+        width: 100%;
+        display: block;
+    }
+
+    header nav ul,
+    .entete nav ul {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px !important;
+        width: 100%;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    header nav li,
+    .entete nav li {
+        min-width: 0;
+        width: 100%;
+    }
+
+    header nav a,
+    .entete nav a {
+        width: 100%;
+        min-height: 42px;
+        padding: 8px 5px;
+        font-size: 12px;
+        line-height: 1.2;
+        text-align: center;
+        white-space: normal;
+    }
+
+    .banniere {
+        min-height: 355px !important;
+        padding: 38px 12px !important;
+    }
+
+    .banniere-contenu {
+        width: 100%;
+        padding: 8px 5px !important;
+    }
+
+    .banniere-contenu h1 {
+        font-size: clamp(26px, 7vw, 32px) !important;
+    }
+
+    .banniere-contenu p {
+        font-size: 14px !important;
+        max-width: 420px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .banniere-joueur {
+        height: 39% !important;
+        max-height: 145px !important;
+        max-width: 32% !important;
+        opacity: .58;
+    }
+
+    .banniere .bouton {
+        padding: 12px 17px;
+        font-size: 14px;
+    }
+
+    .joueurs-stars,
+    .actualites,
+    .statistiques,
+    .actus-accueil,
+    .page-actualites,
+    .page-stats,
+    .contenu,
+    .resultats-page {
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+    }
+
+    .joueurs-stars,
+    .actus-accueil,
+    .leaders-accueil,
+    .leaders-page {
+        margin-top: 25px;
+        margin-bottom: 25px;
+    }
+
+    .joueurs-stars h2,
+    .actus-accueil h2,
+    .leaders-entete h2,
+    .actualites h2,
+    .statistiques h2,
+    .contenu > h2 {
+        font-size: 24px !important;
+        line-height: 1.2;
+        margin-bottom: 17px;
+    }
+
+    .joueurs-stars .liste-joueurs,
+    .grille-actualites,
+    .grille-actus,
+    .grille-videos,
+    .grille-joueurs-stats,
+    .grille-leaders,
+    #classement-complet,
+    .grille-matchs {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) !important;
+        gap: 14px !important;
+    }
+
+    .joueurs-stars .carte-joueur {
+        width: 100% !important;
+        padding: 12px !important;
+    }
+
+    .joueurs-stars .carte-joueur img.photo-joueur {
+        width: 100%;
+        height: clamp(190px, 58vw, 245px) !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        object-fit: cover;
+        object-position: center 18%;
+    }
+
+    .carte-actualite .image-actualite,
+    .grille-actus .image-actualite {
+        height: 190px;
+    }
+
+    .contenu-actualite {
+        padding: 15px !important;
+    }
+
+    .carte-video .lecteur-video,
+    .lecteur-video {
+        aspect-ratio: 16 / 9;
+    }
+
+    .infos-video {
+        padding: 15px;
+    }
+
+    .carte-joueur-stats,
+    .bloc-leader,
+    .carte-match {
+        padding: 13px !important;
+    }
+
+    .carte-joueur-stats img.photo-joueur-stats,
+    .carte-joueur-stats > img:not(.logo-equipe-joueur) {
+        width: 105px;
+        height: 105px;
+    }
+
+    .leaders-accueil,
+    .leaders-page {
+        width: calc(100% - 28px) !important;
+    }
+
+    .leaders-entete {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .bloc-leader {
+        gap: 10px;
+    }
+
+    .leader-photo {
+        width: 54px;
+        height: 54px;
+    }
+
+    .leader-performance {
+        font-size: 14px;
+    }
+
+    .resultats-onglets {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        margin: 18px 0;
+    }
+
+    .resultats-onglets button {
+        min-width: 0;
+        padding: 11px 8px !important;
         font-size: 13px;
+    }
+
+    .resultats-filtres,
+    .filtres,
+    .filtres-stats {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 9px;
+    }
+
+    .resultats-filtres select,
+    .filtres input,
+    .filtres select,
+    .filtres-stats input,
+    .filtres-stats select {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .carte-match .equipes-match {
+        gap: 7px;
+    }
+
+    .carte-match .score-match {
+        font-size: 19px;
+    }
+
+    .tableau-scroll {
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 10px;
+    }
+
+    .tableau-nfl,
+    .tableau-statistiques {
+        min-width: 520px;
+    }
+
+    .page-stats,
+    .page-article,
+    .page-joueur,
+    .contenu {
+        margin-top: 20px;
+    }
+
+    .banniere-stats {
+        padding: 24px 14px;
+    }
+
+    .banniere-stats h2 {
+        font-size: 25px;
+    }
+
+    .details-joueur,
+    #details-match,
+    #article-complet,
+    #stats-joueur,
+    #profil-joueur {
+        padding: 15px !important;
+        border-radius: 12px;
+    }
+
+    .ligne-statistique {
+        gap: 10px;
+        padding: 10px 7px;
+        font-size: 13px;
+    }
+
+    .fantasy-page {
+        padding: 14px 12px 35px !important;
+    }
+
+    .fantasy-hero {
+        padding: 25px 18px !important;
+        border-radius: 14px;
+    }
+
+    .fantasy-panel {
+        padding: 14px !important;
+    }
+
+    .fantasy-form,
+    .fantasy-stats,
+    .matchups,
+    .fantasy-columns,
+    .fantasy-filters {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    .fantasy-toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .fantasy-tabs {
+        max-width: 100%;
+        padding-bottom: 12px;
+    }
+
+    .player-row,
+    .roster-row {
+        gap: 8px;
+        padding: 10px 7px;
+    }
+
+    .player-info strong {
+        font-size: 13px;
+    }
+
+    .fantasy-projection {
+        min-width: 48px;
+    }
+
+    .fantasy-projection strong {
+        font-size: 15px;
+    }
+
+    .popup-fantasy-overlay {
+        padding: 14px;
+    }
+
+    .popup-fantasy {
+        padding: 32px 19px !important;
+    }
+
+    footer {
+        margin-top: 25px;
+        padding: 18px 12px;
+        font-size: 12px;
+    }
+}
+
+/* Très petits téléphones */
+@media (max-width: 360px) {
+    header nav a,
+    .entete nav a {
+        font-size: 11px;
+        padding: 7px 3px;
+    }
+
+    .banniere-contenu h1 {
+        font-size: 25px !important;
+    }
+
+    .leader-performance {
+        font-size: 12px;
     }
 }
 
 /* ======================================================
-   BANNIÈRE D'ACCUEIL - JOUEURS BEAUCOUP PLUS GRANDS
+   NFL FRANCE — TERRAIN PLUS VISIBLE SUR ORDINATEUR ET MOBILE
+   Le fond général est éclairci sur ordinateur ; réglage mobile conservé séparément.
 ====================================================== */
-
-.banniere-joueur {
-    height: 88% !important;
-    max-height: 410px !important;
-    max-width: 30% !important;
-    width: auto !important;
-    object-fit: contain !important;
-    object-position: center bottom !important;
-}
-
-.banniere-joueur.joueur-gauche {
-    left: 1% !important;
-}
-
-.banniere-joueur.joueur-droite {
-    right: 1% !important;
-}
-
-@media (max-width: 900px) {
-    .banniere-joueur {
-        height: 75% !important;
-        max-height: 310px !important;
-        max-width: 31% !important;
-        opacity: 0.95;
+@media (max-width: 768px) {
+    body {
+        background-image:
+            linear-gradient(
+                rgba(3, 13, 28, 0.58),
+                rgba(3, 13, 28, 0.72)
+            ),
+            url("Footballfield.jpg") !important;
+        background-position: center top !important;
+        background-size: cover !important;
+        background-attachment: scroll !important;
     }
 }
 
-@media (max-width: 600px) {
-    .banniere-joueur {
-        height: 55% !important;
-        max-height: 205px !important;
-        max-width: 35% !important;
-        opacity: 0.72;
-    }
+/* ======================================================
+   NFL FRANCE — RÉSULTATS ET CLASSEMENTS : CONTRASTE
+   Cartes de match et tableaux plus clairs pour lire
+   facilement les noms des équipes et les scores.
+====================================================== */
+.resultats-page .carte-match {
+    background: #f7f9fc !important;
+    color: #172b49 !important;
+    border: 1px solid #cbd5e1 !important;
+}
+
+.resultats-page .carte-match h3,
+.resultats-page .carte-match strong,
+.resultats-page .carte-match b,
+.resultats-page .carte-match .score-match,
+.resultats-page .carte-match .equipe-match,
+.resultats-page .carte-match .equipe-match span,
+.resultats-page .carte-match p {
+    color: #14243b !important;
+    text-shadow: none !important;
+    opacity: 1 !important;
+}
+
+.resultats-page .carte-match small {
+    color: #526176 !important;
+}
+
+.resultats-page .carte-match .score-match {
+    font-size: 23px !important;
+    font-weight: 900 !important;
+}
+
+.resultats-page .tableau-nfl,
+.resultats-page .tableau-statistiques,
+#classement-complet .tableau-nfl,
+#classement-complet .tableau-statistiques {
+    background: #f7f9fc !important;
+    color: #172b49 !important;
+}
+
+.resultats-page .tableau-nfl td,
+.resultats-page .tableau-statistiques td,
+#classement-complet .tableau-nfl td,
+#classement-complet .tableau-statistiques td {
+    background: #f7f9fc !important;
+    color: #172b49 !important;
+    border-bottom: 1px solid #d7e0eb !important;
+}
+
+.resultats-page .tableau-nfl tr:nth-child(even) td,
+.resultats-page .tableau-statistiques tr:nth-child(even) td,
+#classement-complet .tableau-nfl tr:nth-child(even) td,
+#classement-complet .tableau-statistiques tr:nth-child(even) td {
+    background: #eaf0f7 !important;
+}
+
+.resultats-page .tableau-nfl th,
+.resultats-page .tableau-statistiques th,
+#classement-complet .tableau-nfl th,
+#classement-complet .tableau-statistiques th {
+    background: #173b63 !important;
+    color: #ffffff !important;
 }
