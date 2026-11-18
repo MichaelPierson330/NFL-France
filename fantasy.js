@@ -51,15 +51,287 @@ let league = null;
 let selectedTeam = "ALL";
 let currentNFLWeek = null;
 let modalOpen = false;
-
-try {
-  league = JSON.parse(localStorage.getItem(LEAGUE_KEY));
-} catch {
-  league = null;
-}
+let leagueUnsubscribe = null;
+let leagueDocRef = null;
+let currentUser = null;
+let leagueRaw = null;
+let joinCodeInput = null;
+let pseudoInput = null;
+let createPseudoInput = null;
+let multiplayerStatus = null;
+let startDraftButton = null;
 
 function save() {
-  localStorage.setItem(LEAGUE_KEY, JSON.stringify(league));
+  // Les données de ligue sont désormais enregistrées dans Firestore.
+}
+
+function firebaseTools() {
+  if (!window.firebaseDB || !window.firebaseFirestore || !window.firebaseAuth) {
+    throw new Error("Firebase n'est pas initialisé. Vérifie firebase.js et fantasy.html.");
+  }
+  return window.firebaseFirestore;
+}
+
+function managerName(uid) {
+  return leagueRaw?.members?.[uid] || "Manager";
+}
+
+function mapFirestoreLeague(data, id) {
+  const memberIds = Object.keys(data.members || {});
+  const picks = (data.picks || []).map(pick => ({
+    manager: memberIds.indexOf(pick.uid),
+    playerId: String(pick.playerId),
+    uid: pick.uid
+  }));
+  return {
+    id,
+    name: data.name || "Ligue NFL France",
+    rounds: Number(data.rounds),
+    managers: memberIds.map(uid => data.members[uid]),
+    memberIds,
+    picks,
+    status: data.status,
+    capacity: Number(data.capacity),
+    owner: data.owner,
+    inviteCode: id
+  };
+}
+
+function stopLeagueListener() {
+  if (leagueUnsubscribe) {
+    leagueUnsubscribe();
+    leagueUnsubscribe = null;
+  }
+  leagueDocRef = null;
+  leagueRaw = null;
+}
+
+async function attachLeague(code) {
+  const user = await window.firebaseReady;
+  currentUser = user;
+  const f = firebaseTools();
+  const ref = f.doc(window.firebaseDB, "leagues", code);
+  const snap = await f.getDoc(ref);
+  if (!snap.exists()) throw new Error("Aucune ligue ne correspond à ce code.");
+  leagueDocRef = ref;
+  stopLeagueListener();
+  leagueDocRef = ref;
+  leagueUnsubscribe = f.onSnapshot(ref, snapshot => {
+    if (!snapshot.exists()) {
+      stopLeagueListener();
+      league = null;
+      render();
+      return;
+    }
+    leagueRaw = snapshot.data();
+    league = mapFirestoreLeague(leagueRaw, snapshot.id);
+    render();
+    renderMultiplayerControls();
+  }, error => {
+    console.error("Synchronisation Firestore :", error);
+    showFantasyModal({
+      title: "Erreur de synchronisation",
+      message: error.message || "Impossible de suivre cette ligue.",
+      confirmText: "Compris"
+    });
+  });
+}
+
+function randomInviteCode() {
+  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let code = "";
+  for (let i = 0; i < 6; i++) {
+    code += alphabet[Math.floor(Math.random() * alphabet.length)];
+  }
+  return code;
+}
+
+function showMultiplayerError(error) {
+  console.error(error);
+  showFantasyModal({
+    title: "Opération impossible",
+    message: error?.message || "Une erreur est survenue.",
+    confirmText: "Compris"
+  });
+}
+
+async function createRemoteLeague(name, capacity, rounds, pseudo) {
+  const user = await window.firebaseReady;
+  currentUser = user;
+  const f = firebaseTools();
+  let code = randomInviteCode();
+  let ref = f.doc(window.firebaseDB, "leagues", code);
+  let existing = await f.getDoc(ref);
+  while (existing.exists()) {
+    code = randomInviteCode();
+    ref = f.doc(window.firebaseDB, "leagues", code);
+    existing = await f.getDoc(ref);
+  }
+  await f.setDoc(ref, {
+    name,
+    owner: user.uid,
+    status: "waiting",
+    members: { [user.uid]: pseudo },
+    capacity,
+    rounds,
+    picks: [],
+    pickedIds: [],
+    draftOrder: [],
+    createdAt: new Date().toISOString()
+  });
+  await attachLeague(code);
+}
+
+async function joinRemoteLeague(code, pseudo) {
+  const user = await window.firebaseReady;
+  currentUser = user;
+  const f = firebaseTools();
+  const ref = f.doc(window.firebaseDB, "leagues", code.toUpperCase());
+  await f.runTransaction(window.firebaseDB, async transaction => {
+    const snap = await transaction.get(ref);
+    if (!snap.exists()) throw new Error("Code de ligue introuvable.");
+    const data = snap.data();
+    if (data.status !== "waiting") throw new Error("Cette draft a déjà commencé.");
+    if (data.members[user.uid]) throw new Error("Tu fais déjà partie de cette ligue.");
+    if (Object.keys(data.members || {}).length >= data.capacity) {
+      throw new Error("Cette ligue est complète.");
+    }
+    transaction.update(ref, { members: { ...data.members, [user.uid]: pseudo } });
+  });
+  await attachLeague(code.toUpperCase());
+}
+
+async function startRemoteDraft() {
+  if (!leagueDocRef || !leagueRaw || leagueRaw.owner !== currentUser?.uid) return;
+  const ids = Object.keys(leagueRaw.members || {});
+  if (ids.length !== Number(leagueRaw.capacity)) {
+    throw new Error("Il faut que tous les managers aient rejoint la ligue.");
+  }
+  const order = [];
+  for (let round = 0; round < Number(leagueRaw.rounds); round++) {
+    const sequence = round % 2 === 0 ? ids : [...ids].reverse();
+    order.push(...sequence);
+  }
+  await firebaseTools().updateDoc(leagueDocRef, {
+    status: "draft",
+    draftOrder: order
+  });
+}
+
+function setupMultiplayerUI() {
+  const creation = $("creation");
+  if (!creation || $("multiplayer-entry")) return;
+
+  // Le pseudo du créateur est placé dans le formulaire de création,
+  // indépendamment du pseudo utilisé pour rejoindre une autre ligue.
+  const form = $("league-form");
+  if (form && !$("create-manager-pseudo")) {
+    const createField = make("div", "fantasy-form-field");
+    const createLabel = make("label", "", "Ton pseudo de manager");
+    createLabel.htmlFor = "create-manager-pseudo";
+    createPseudoInput = make("input");
+    createPseudoInput.id = "create-manager-pseudo";
+    createPseudoInput.placeholder = "Ex : VikingsFan24";
+    createPseudoInput.maxLength = 24;
+    createPseudoInput.required = true;
+    createField.append(createLabel, createPseudoInput);
+    const submit = form.querySelector('button[type="submit"]');
+    if (submit) form.insertBefore(createField, submit);
+    else form.append(createField);
+  }
+
+  const area = make("div", "fantasy-multiplayer-entry");
+  area.id = "multiplayer-entry";
+  area.append(make("h3", "", "Rejoindre une ligue existante"));
+
+  pseudoInput = make("input");
+  pseudoInput.id = "manager-pseudo";
+  pseudoInput.placeholder = "Ton pseudo";
+  pseudoInput.maxLength = 24;
+  pseudoInput.required = true;
+
+  joinCodeInput = make("input");
+  joinCodeInput.id = "join-league-code";
+  joinCodeInput.placeholder = "Code d'invitation";
+  joinCodeInput.maxLength = 6;
+  joinCodeInput.autocomplete = "off";
+
+  const joinButton = make("button", "", "Rejoindre la ligue");
+  joinButton.type = "button";
+  joinButton.addEventListener("click", async () => {
+    const pseudo = pseudoInput.value.trim();
+    const code = joinCodeInput.value.trim().toUpperCase();
+    if (pseudo.length < 2 || pseudo.length > 24) {
+      showMultiplayerError(new Error("Ton pseudo doit contenir entre 2 et 24 caractères."));
+      return;
+    }
+    if (!/^[A-Z2-9]{6}$/.test(code)) {
+      showMultiplayerError(new Error("Le code doit contenir 6 caractères."));
+      return;
+    }
+    try {
+      joinButton.disabled = true;
+      await joinRemoteLeague(code, pseudo);
+    } catch (error) {
+      showMultiplayerError(error);
+    } finally {
+      joinButton.disabled = false;
+    }
+  });
+
+  area.append(pseudoInput, joinCodeInput, joinButton);
+  creation.append(area);
+}
+
+function renderMultiplayerControls() {
+  if (!league || !leagueRaw) return;
+  const toolbar = $("vue-ensemble");
+  if (!toolbar) return;
+
+  let panel = $("multiplayer-controls");
+  if (!panel) {
+    panel = make("div", "fantasy-multiplayer-controls");
+    panel.id = "multiplayer-controls";
+    toolbar.after(panel);
+  }
+  panel.replaceChildren();
+
+  const memberIds = Object.keys(leagueRaw.members || {});
+  const count = make("p", "", `Managers : ${memberIds.length}/${leagueRaw.capacity}`);
+  const codeLine = make("p", "", `Code d'invitation : ${league.inviteCode}`);
+  const copy = make("button", "secondary", "Copier le code");
+  copy.type = "button";
+  copy.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(league.inviteCode);
+      copy.textContent = "Code copié !";
+    } catch {
+      showMultiplayerError(new Error("Copie impossible : sélectionne le code pour le copier."));
+    }
+  });
+  panel.append(count, codeLine, copy);
+
+  const members = make("div", "fantasy-manager-list");
+  memberIds.forEach((uid, index) => {
+    members.append(make("p", "", `${index + 1}. ${leagueRaw.members[uid]}${uid === leagueRaw.owner ? " · Créateur" : ""}`));
+  });
+  panel.append(members);
+
+  if (leagueRaw.status === "waiting") {
+    panel.append(make("p", "fantasy-hint", "En attente des autres managers…"));
+    if (leagueRaw.owner === currentUser?.uid) {
+      const start = make("button", "", "Démarrer la draft");
+      start.type = "button";
+      start.disabled = memberIds.length !== Number(leagueRaw.capacity);
+      start.addEventListener("click", async () => {
+        try { start.disabled = true; await startRemoteDraft(); }
+        catch (error) { showMultiplayerError(error); start.disabled = false; }
+      });
+      panel.append(start);
+    }
+  } else {
+    panel.append(make("p", "fantasy-hint", leagueRaw.status === "draft" ? "La draft est en cours." : "Ligue terminée."));
+  }
 }
 
 function make(tag, className = "", content) {
@@ -297,6 +569,7 @@ function render() {
   const done = league.picks.length;
   const finished = done >= total;
   const current = finished ? null : pickManager(done);
+  const waiting = leagueRaw?.status === "waiting";
 
   $("league-title").textContent = league.name;
   $("pick-count").textContent = `${done} / ${total}`;
@@ -305,13 +578,15 @@ function render() {
     ? "Terminée"
     : `${Math.floor(done / league.managers.length) + 1} / ${league.rounds}`;
 
-  $("current-manager").textContent = finished
+  $("current-manager").textContent = waiting || finished
     ? "—"
-    : league.managers[current];
+    : managerName(leagueRaw.draftOrder[done]);
 
-  $("draft-status").textContent = finished
-    ? "Draft terminée !"
-    : `Au tour de ${league.managers[current]} de choisir un joueur.`;
+  $("draft-status").textContent = waiting
+    ? "En attente des managers et du lancement de la draft."
+    : finished
+      ? "Draft terminée !"
+      : `Au tour de ${managerName(leagueRaw.draftOrder[done])} de choisir un joueur.`;
 
   const teamSelect = $("team-select");
   const previous = teamSelect.value || "0";
@@ -399,7 +674,8 @@ function renderPlayers() {
 
   const finished =
     league.picks.length >=
-    league.managers.length * league.rounds;
+    league.managers.length * league.rounds ||
+    leagueRaw?.status !== "draft";
 
   let shown = 0;
   const pageSize = 60;
@@ -616,51 +892,52 @@ function showFantasyModal({
 }
 
 async function draft(playerId) {
-  if (!league || !PLAYERS.length || modalOpen) return;
+  if (!league || !PLAYERS.length || modalOpen || !leagueRaw || !leagueDocRef) return;
+  if (leagueRaw.status !== "draft") return;
 
-  const originalLeague = league;
-  const pickIndex = league.picks.length;
-  const total = league.managers.length * league.rounds;
-
-  if (pickIndex >= total) return;
-
-  if (
-    league.picks.some(
-      pick => String(pick.playerId) === String(playerId)
-    )
-  ) return;
+  const user = await window.firebaseReady;
+  const index = leagueRaw.picks.length;
+  if (leagueRaw.draftOrder[index] !== user.uid) {
+    showMultiplayerError(new Error("Ce n'est pas encore ton tour."));
+    return;
+  }
 
   const player = getPlayer(playerId);
-  if (!player) return;
-
-  const manager = pickManager(pickIndex);
+  if (!player || leagueRaw.pickedIds.includes(String(playerId))) return;
 
   const confirmed = await showFantasyModal({
     title: "Confirmer votre sélection",
-    message:
-      `${league.managers[manager]} · ` +
-      `Tour ${Math.floor(pickIndex / league.managers.length) + 1}`,
+    message: `Tour ${Math.floor(index / league.managers.length) + 1}`,
     player,
     confirmText: "Choisir ce joueur"
   });
-
   if (!confirmed) return;
 
-  if (
-    league !== originalLeague ||
-    league.picks.length !== pickIndex ||
-    league.picks.some(
-      pick => String(pick.playerId) === String(playerId)
-    )
-  ) return;
-
-  league.picks.push({
-    manager,
-    playerId: player.id
-  });
-
-  save();
-  render();
+  try {
+    const f = firebaseTools();
+    await f.runTransaction(window.firebaseDB, async transaction => {
+      const snap = await transaction.get(leagueDocRef);
+      if (!snap.exists()) throw new Error("La ligue n'existe plus.");
+      const data = snap.data();
+      const pickIndex = data.picks.length;
+      if (data.status !== "draft") throw new Error("La draft n'est pas active.");
+      if (data.draftOrder[pickIndex] !== user.uid) throw new Error("Le tour a déjà changé.");
+      if (data.pickedIds.includes(String(player.id))) throw new Error("Ce joueur vient d'être sélectionné.");
+      const pick = {
+        uid: user.uid,
+        playerId: String(player.id),
+        name: player.name,
+        position: player.position,
+        team: player.team
+      };
+      transaction.update(leagueDocRef, {
+        picks: [...data.picks, pick],
+        pickedIds: [...data.pickedIds, String(player.id)]
+      });
+    });
+  } catch (error) {
+    showMultiplayerError(error);
+  }
 }
 
 function renderRoster() {
@@ -886,62 +1163,45 @@ async function loadProjections() {
   }
 }
 
-$("league-form").addEventListener("submit", event => {
+$("league-form").addEventListener("submit", async event => {
   event.preventDefault();
-
   if (!PLAYERS.length) {
-    showFantasyModal({
-      title: "Chargement en cours",
-      message: "Attends que les joueurs NFL soient chargés.",
-      confirmText: "Compris"
-    });
+    showFantasyModal({ title: "Chargement en cours", message: "Attends que les joueurs NFL soient chargés.", confirmText: "Compris" });
     return;
   }
-
   const name = $("league-name").value.trim();
   const count = Number($("manager-count").value);
   const rounds = Number($("round-count").value);
-
+  const pseudo = $("create-manager-pseudo")?.value.trim();
   if (!name) return;
-
-  if (count * rounds > PLAYERS.length) {
-    showFantasyModal({
-      title: "Pas assez de joueurs",
-      message: "Choisis moins de managers ou de tours.",
-      confirmText: "Compris"
-    });
+  if (!pseudo || pseudo.length < 2 || pseudo.length > 24) {
+    showMultiplayerError(new Error("Renseigne ton pseudo de manager (2 à 24 caractères)."));
     return;
   }
-
-  league = {
-    name,
-    rounds,
-    managers: Array.from(
-      { length: count },
-      (_, index) => `Manager ${index + 1}`
-    ),
-    picks: []
-  };
-
-  save();
-  render();
+  if (count * rounds > PLAYERS.length) {
+    showMultiplayerError(new Error("Pas assez de joueurs disponibles pour cette draft."));
+    return;
+  }
+  const button = $("league-form").querySelector('button[type="submit"]');
+  try {
+    button.disabled = true;
+    await createRemoteLeague(name, count, rounds, pseudo);
+  } catch (error) {
+    showMultiplayerError(error);
+  } finally {
+    button.disabled = false;
+  }
 });
 
 $("reset-league").addEventListener("click", async () => {
   if (!league || modalOpen) return;
-
   const confirmed = await showFantasyModal({
-    title: "Supprimer la ligue ?",
-    message:
-      "Tous les choix de draft et les effectifs " +
-      "de cette ligue seront supprimés.",
-    confirmText: "Supprimer",
-    danger: true
+    title: "Quitter cette ligue ?",
+    message: "La ligue restera disponible pour les autres managers. Tu pourras la rejoindre à nouveau avec son code.",
+    confirmText: "Quitter"
   });
-
   if (!confirmed) return;
-
-  localStorage.removeItem(LEAGUE_KEY);
+  stopLeagueListener();
   league = null;
   render();
 });
@@ -957,6 +1217,15 @@ $("team-select").addEventListener(
   "change",
   renderRoster
 );
+
+setupMultiplayerUI();
+
+window.firebaseReady.then(user => {
+  currentUser = user;
+  console.log("Fantasy prête pour", user.uid);
+}).catch(error => {
+  console.error("Connexion Firebase impossible :", error);
+});
 
 render();
 
