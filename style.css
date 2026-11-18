@@ -4591,3 +4591,143 @@ footer {
     background: #173b63 !important;
     color: #ffffff !important;
 }
+
+/* CORRECTION FICHE JOUEUR : contraste du texte sur fond clair */
+.details-joueur,
+#stats-joueur,
+#profil-joueur,
+#details-joueur {
+    background: #ffffff !important;
+    color: #172b49 !important;
+    text-shadow: none !important;
+}
+
+.details-joueur h1,
+.details-joueur h2,
+.details-joueur h3,
+.details-joueur h4,
+#stats-joueur h1,
+#stats-joueur h2,
+#stats-joueur h3,
+#stats-joueur h4,
+#profil-joueur h1,
+#profil-joueur h2,
+#profil-joueur h3,
+#profil-joueur h4,
+#details-joueur h1,
+#details-joueur h2,
+#details-joueur h3,
+#details-joueur h4 {
+    color: #172b49 !important;
+    text-shadow: none !important;
+}
+
+.details-joueur p,
+.details-joueur span,
+.details-joueur strong,
+.details-joueur label,
+#stats-joueur p,
+#stats-joueur span,
+#stats-joueur strong,
+#stats-joueur label,
+#profil-joueur p,
+#profil-joueur span,
+#profil-joueur strong,
+#profil-joueur label,
+#details-joueur p,
+#details-joueur span,
+#details-joueur strong,
+#details-joueur label {
+    color: #263b55 !important;
+    text-shadow: none !important;
+}
+
+.details-joueur .ligne-statistique,
+#stats-joueur .ligne-statistique,
+#profil-joueur .ligne-statistique,
+#details-joueur .ligne-statistique {
+    color: #172b49 !important;
+    background: #f4f7fb !important;
+    border-bottom: 1px solid #d9e2ed !important;
+    text-shadow: none !important;
+}
+
+.details-joueur button,
+#stats-joueur button,
+#profil-joueur button,
+#details-joueur button {
+    color: #ffffff !important;
+    text-shadow: none !important;
+}
+
+/* =========================================
+   CORRECTION VISIBILITÉ - FICHE STATISTIQUES
+   ========================================= */
+
+/* Fond général de la fiche */
+#details-joueur {
+    background: #ffffff !important;
+    color: #17243a !important;
+}
+
+/* Nom du joueur */
+#details-joueur h2 {
+    color: #17243a !important;
+}
+
+/* Informations sous le nom */
+#details-joueur > p {
+    color: #44546a !important;
+}
+
+/* Zone des statistiques */
+#details-joueur #resultats-saison {
+    color: #17243a !important;
+}
+
+/* Titre de saison */
+#details-joueur #resultats-saison > h3 {
+    color: #17243a !important;
+    background: transparent !important;
+}
+
+/* Titres des catégories */
+#details-joueur .bloc-statistiques h4 {
+    background: #1d3557 !important;
+    color: #ffffff !important;
+    padding: 14px !important;
+    border-radius: 8px !important;
+}
+
+/* Tableau */
+#details-joueur .tableau-statistiques {
+    width: 100% !important;
+    background: #ffffff !important;
+    border-collapse: collapse !important;
+}
+
+/* Noms et valeurs des statistiques */
+#details-joueur .tableau-statistiques td {
+    color: #17243a !important;
+    background: #ffffff !important;
+    padding: 14px !important;
+    border-bottom: 1px solid #dce3ec !important;
+}
+
+/* Chiffres à droite */
+#details-joueur .tableau-statistiques td:last-child {
+    color: #153a70 !important;
+    font-weight: 800 !important;
+    text-align: right !important;
+}
+
+/* Lignes alternées */
+#details-joueur .tableau-statistiques tr:nth-child(even) td {
+    background: #f1f5f9 !important;
+}
+
+/* Bouton fermer */
+#details-joueur .fermer-statistiques {
+    background: #e63946 !important;
+    color: #ffffff !important;
+}
