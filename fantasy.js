@@ -219,6 +219,15 @@ async function startRemoteDraft() {
 }
 
 function setupMultiplayerUI() {
+  // Ajoute le format Duel 1 contre 1 au sélecteur, sans modifier fantasy.html.
+  const managerSelect = $("manager-count");
+  if (managerSelect && !Array.from(managerSelect.options).some(option => Number(option.value) === 2)) {
+    const duelOption = document.createElement("option");
+    duelOption.value = "2";
+    duelOption.textContent = "2 managers · Duel";
+    managerSelect.insertBefore(duelOption, managerSelect.options[0] || null);
+  }
+
   const creation = $("creation");
   if (!creation || $("multiplayer-entry")) return;
 
