@@ -591,11 +591,14 @@ function render() {
     ? "—"
     : managerName(leagueRaw.draftOrder[done]);
 
+  const currentTurnUid = leagueRaw?.draftOrder?.[done];
   $("draft-status").textContent = waiting
     ? "En attente des managers et du lancement de la draft."
     : finished
       ? "Draft terminée !"
-      : `Au tour de ${managerName(leagueRaw.draftOrder[done])} de choisir un joueur.`;
+      : currentTurnUid === currentUser?.uid
+        ? "C'est ton tour ! Choisis ton joueur."
+        : `Au tour de ${managerName(currentTurnUid)} de choisir un joueur.`;
 
   const teamSelect = $("team-select");
   const previous = teamSelect.value || "0";
@@ -686,6 +689,9 @@ function renderPlayers() {
     league.managers.length * league.rounds ||
     leagueRaw?.status !== "draft";
 
+  const currentTurnUid = leagueRaw?.draftOrder?.[league.picks.length] || null;
+  const isMyTurn = Boolean(currentUser?.uid && currentTurnUid === currentUser.uid);
+
   let shown = 0;
   const pageSize = 60;
 
@@ -733,7 +739,10 @@ function renderPlayers() {
 
       const button = make("button", "", "Choisir");
       button.type = "button";
-      button.disabled = finished || modalOpen;
+      button.disabled = finished || modalOpen || !isMyTurn;
+      if (!finished && !isMyTurn) {
+        button.title = "Attends ton tour pour sélectionner un joueur";
+      }
 
       button.addEventListener("click", () => {
         draft(player.id);
